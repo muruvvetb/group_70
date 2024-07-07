@@ -64,14 +64,15 @@ Fikir bulma aşaması bu sprintte gerçekleşmiştir. Herkes fikir önerileriyle
 
 Bu sprintte toplamda 100 puanlık görevin tamamlanması planlanmıştır. Görevleri puanlarken Fibonacci sayılarını kullandık. Her bir görev, tamamlanma süresine ve karmaşıklığına göre puanlandırılmıştır. Örneğin, fikir belirleme sprintte zamana yayıldığı için bu 21 puanlık bir efor olarak, ekip içindeki görevlerin belirlenmesi ise 3 puan olarak değerlendirilmiştir.
 
+1. Sprintte 100 Puanlık görev tamamlanmştır.
+
 ### Daily Scrum
 
 Her gün WhatsApp üzerinden herkes neler yaptığını ve yapacağını konuşmuştur. 
 
 ### Sprint Board Screenshotları
+<img width="1658" alt="Screenshot 2024-07-07 at 23 30 04" src="https://github.com/muruvvetb/group_70/assets/52457187/0f883c10-1845-4a71-96be-1ac2d9d14dd2">
 
-![Screenshot 2024-07-02 at 21 26 31](https://github.com/muruvvetb/group_70/assets/52457187/194a02c5-a125-446c-b129-8577e04b2f52)
-)
 
 ### Ürün Durumu: Ekran Görüntüleri
 
