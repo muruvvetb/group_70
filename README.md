@@ -70,7 +70,7 @@ Her gün WhatsApp üzerinden herkes neler yaptığını ve yapacağını konuşm
 
 ### Sprint Board Screenshotları
 
-![Sprint Board Screenshot](![Screenshot 2024-07-02 at 21 26 31](https://github.com/muruvvetb/group_70/assets/52457187/194a02c5-a125-446c-b129-8577e04b2f52)
+(![Screenshot 2024-07-02 at 21 26 31](https://github.com/muruvvetb/group_70/assets/52457187/194a02c5-a125-446c-b129-8577e04b2f52)
 )
 
 ### Ürün Durumu: Ekran Görüntüleri
