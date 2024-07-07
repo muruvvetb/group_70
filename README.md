@@ -70,21 +70,15 @@ Her gün WhatsApp üzerinden herkes neler yaptığını ve yapacağını konuşm
 
 ### Sprint Board Screenshotları
 
-(![Screenshot 2024-07-02 at 21 26 31](https://github.com/muruvvetb/group_70/assets/52457187/194a02c5-a125-446c-b129-8577e04b2f52)
+![Screenshot 2024-07-02 at 21 26 31](https://github.com/muruvvetb/group_70/assets/52457187/194a02c5-a125-446c-b129-8577e04b2f52)
 )
 
 ### Ürün Durumu: Ekran Görüntüleri
 
-Sprint sonunda tamamlanan ekranların durumunu gösteren ekran görüntüleri aşağıdadır. Ana sayfa tasarımı, ilaç tespit ekranı tasarımı ve kullanıcı paneli tasarımı tamamlanmış ve işlevsel hale getirilmiştir.
+<img width="395" alt="Screenshot 2024-07-07 at 23 32 24" src="https://github.com/muruvvetb/group_70/assets/52457187/9f12937c-0499-47ac-94c4-f33dbc9dc9dc"> <img width="393" alt="Screenshot 2024-07-07 at 23 32 29" src="https://github.com/muruvvetb/group_70/assets/52457187/043c795f-7829-4635-80d2-07c10056b758"> <img width="390" alt="Screenshot 2024-07-07 at 23 32 34" src="https://github.com/muruvvetb/group_70/assets/52457187/5678911c-7463-4a62-97c6-efe87621ad69">
 
-- Ana Sayfa Tasarımı
-![Ana Sayfa](path/to/anasayfa_screenshot.png)
 
-- İlaç Tespit Ekranı Tasarımı
-![İlaç Tespit Ekranı](path/to/ilac_tespit_screenshot.png)
 
-- Kullanıcı Paneli Tasarımı
-![Kullanıcı Paneli](path/to/kullanici_paneli_screenshot.png)
 
 ### Sprint Review
 
