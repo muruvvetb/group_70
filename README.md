@@ -60,11 +60,12 @@
 
 Fikir bulma aşaması bu sprintte gerçekleşmiştir. Herkes fikir önerileriyle geldi. Yapılan market analizleri, teknolojik gereklilikler ve kısıtlı zamanla efor tespiti yapılarak fikir belirlendi. Fikir takımca tartışılarak geliştirildi. Uygulama için proje teslim tarihine uyarak ana işlevler tanımlandı ve opsiyonel özellikler belirlendi. Sprint sürecinde proje amacı ve hedefleri belirlenmiş, hedef kitle analizi ve persona oluşturma çalışmaları yapılmıştır. Proje yönetim aracı olarak Trello'ya karar verilmiştir. Uygulamanın tasarımları Figma ile yapılmasına karar verilmiştir. Uygulamanın renk paleti belirlenmiş ve ana sayfa, ilaç tespit ekranı ve kullanıcı paneli tasarımları tamamlanmıştır. Uygulamanın adına karar verilmiş ve projenin ilk logo tasarımı gerçekleştirilmiştir.
 
-Sprintte **100 Puanlık görev tamamlanmıştır.
+Sprintte **100** Puanlık görev tamamlanmıştır.
 
 ### Puan Tamamlama Mantığı
 
 Bu sprintte toplamda 100 puanlık görevin tamamlanması planlanmıştır. Görevleri puanlarken Fibonacci dizisini kullandık. Her bir görev, tamamlanma süresine ve karmaşıklığına göre puanlandırılmıştır.
+
 Yapılan planlamalar sonucunda, 2. sprint için tahmini 149 puan, 3. sprint içinse 115 puan olduğu öngörülmüştür.
 
 
