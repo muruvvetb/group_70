@@ -82,7 +82,7 @@ Her gün WhatsApp üzerinden herkes neler yaptığını ve yapacağını konuşm
 <img width="395" alt="Screenshot 2024-07-07 at 23 32 24" src="https://github.com/muruvvetb/group_70/assets/52457187/9f12937c-0499-47ac-94c4-f33dbc9dc9dc"> <img width="393" alt="Screenshot 2024-07-07 at 23 32 29" src="https://github.com/muruvvetb/group_70/assets/52457187/043c795f-7829-4635-80d2-07c10056b758"> 
 <img width="390" alt="Screenshot 2024-07-07 at 23 32 34" src="https://github.com/muruvvetb/group_70/assets/52457187/5678911c-7463-4a62-97c6-efe87621ad69"> <img width="387" alt="Screenshot 2024-07-07 at 23 32 39" src="https://github.com/muruvvetb/group_70/assets/52457187/b439353f-6035-4841-8d98-bbae9352822b"> 
 <img width="408" alt="Screenshot 2024-07-07 at 23 32 52" src="https://github.com/muruvvetb/group_70/assets/52457187/3c088546-ab3e-41f4-bd18-d3f0d1bd4616"> <img width="397" alt="Screenshot 2024-07-07 at 23 32 57" src="https://github.com/muruvvetb/group_70/assets/52457187/446436f2-2e95-4dea-908e-9742ea3adab4">
-<img width="390" alt="Screenshot 2024-07-07 at 23 33 02" src="https://github.com/muruvvetb/group_70/assets/52457187/0f52e778-7d01-4358-8596-344d762a166e"> ![Screenshot 2024-07-08 at 18 11 03](https://github.com/muruvvetb/group_70/assets/52457187/ba5820b3-fa85-4aac-942a-93bbf88bea92)
+<img width="390" alt="Screenshot 2024-07-07 at 23 33 02" src="https://github.com/muruvvetb/group_70/assets/52457187/0f52e778-7d01-4358-8596-344d762a166e"> <img width="401" alt="Screenshot 2024-07-08 at 18 14 58" src="https://github.com/muruvvetb/group_70/assets/52457187/e58f30f1-c625-4eb0-8d06-bc48240397bb">
 
  
 
