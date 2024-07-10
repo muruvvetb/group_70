@@ -4,9 +4,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:YOUR_CURRENT_ANDROID_GRADLE_VERSION'
-        // Diğer dependencies satırları buraya eklenecek
-        classpath 'com.google.gms:google-services:latest_version'
+        classpath 'com.android.tools.build:gradle:7.0.2' 
+        classpath 'com.google.gms:google-services:4.3.10' 
     }
 }
 
