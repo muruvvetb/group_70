@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+/*
+import 'screens/home_screen.dart';
+import 'screens/medical_services_screen.dart';
+import 'screens/camera_screen.dart';
+import 'screens/notifications_screen.dart';
+import 'screens/profile_screen.dart';
+*/
+
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
 
@@ -14,6 +22,41 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     setState(() {
       _selectedIndex = index;
     });
+    // Arkadaşlarınız kendi ekranlarını hallettiklerinde aşağıdaki kodları aktif edebilirler
+    /*
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MedicalServicesScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CameraScreen()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NotificationsScreen()),
+        );
+        break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        );
+        break;
+    }
+    */
   }
 
   @override
@@ -60,16 +103,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         Positioned(
           bottom: 35, // Yükseklik ayarları
           left: MediaQuery.of(context).size.width / 2 - 28, // Ortaya hizalama
-          
           child: FloatingActionButton(
             onPressed: () => _onItemTapped(2), // Kamera ikonuna tıklanma
             backgroundColor: const Color(0xFF1F3C51), // Etrafındaki çemberin rengi
-            
-            child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 255, 255, 255)), // Kamera ikonu
-            shape: CircleBorder(CircleBorder.size (40)), // Daire şeklinde buton
-
-            
-            
+            child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)), // Kamera ikonu
+            shape: const CircleBorder(), // Daire şeklinde buton
           ),
         ),
       ],
@@ -79,14 +117,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget _buildIcon(IconData outlineIcon, IconData filledIcon, int index) {
     final isSelected = _selectedIndex == index;
     return Container(
-      decoration: isSelected
-          ? BoxDecoration(
-              color: const Color(0xFF93ABBF), // Seçili öğe arka plan rengi
-              borderRadius: BorderRadius.circular(20),
-            )
-          : null,
+      decoration: BoxDecoration(
+        color: isSelected ? const Color(0xFF93ABBF) : Colors.transparent, // Seçili öğe arka plan rengi
+        borderRadius: BorderRadius.circular(20),
+      ),
       padding: const EdgeInsets.all(8),
       child: Icon(isSelected ? filledIcon : outlineIcon),
     );
   }
 }
+
