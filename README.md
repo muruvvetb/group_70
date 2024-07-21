@@ -101,3 +101,54 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 ### Sprint Retrospective
 
 İkinci sprintte uygulama tasarımının geliştirilmesine karar verilmiştir. Merve'nin logo tasarımını geliştirmesi planlanmıştır. ML Kit’in görselden yazı tanıma özelliği bazı ilaç ambalajlarında test edilecektir. Uygulamanın bazı sayfalarının (giriş yap, kaydol, ana sayfa, profil, GPS/harita özelliklerinin) kodlanmasıyla devam edilecektir. Prospektüs için uygun veritabanı bulunarak uygulamada kullanılacaktır. Uygulamanın backend kısmı için Firebase kullanılacaktır. Uygulamanın ilk dili olarak Türkçe belirlenmiştir. Eğer prospektüs veritabanı Türkçe bulunamazsa, uygulamanın ilk versiyonu İngilizce'ye çevrilebilir.
+
+
+
+## 2. Sprint Raporu
+
+### Sprint Notları
+
+- Anasayfa ve giriş ekranı kodlandı.
+- İlaç veritabanı API'si bulundu ve entegre edildi.
+- İlaç alarm görüntüleme ekranı kodlandı.
+- Kayıt ekranı ve alarm kurma ekranı kodlandı.
+- Veri tabanı tasarımı tamamlandı.
+- İlaç takip ekranındaki takvim widget tasarımında iyileştirmeler yapıldı.
+- Yakındaki nöbetçi eczaneler API'si geç bulunması nedeniyle önce yakındaki eczaneler olarak kodlandı. Nöbetçi eczaneler 3. sprintte entegre edilecek.
+- Kullanıcı profilinde değişikliklerin kaydedilmesi için gerekli buton eklendi.
+
+### Sprint içinde tamamlanması tahmin edilen puan
+- 167
+
+### Puan tamamlama mantığı
+- 2. sprint için öngörülen puan 149 idi.
+- Planlama toplantısında toplam puan 167 olarak belirlendi.
+- Yoğunluk nedeniyle tamamlanan puan 133 oldu.
+- Puan dağılımlarında yine Fibonacci sayıları kullanılmıştır. Puanlar ekip üyelerinin değerlendirdikleri iş yüküne göre dağıtılmıştır.
+
+### Daily Scrum
+- Hibrit olarak WhatsApp ve Zoom üzerinden gerçekleştirildi.
+- Ekip üyeleri, günlük saat 13:00’da bir önceki gün neler yaptığını veya yapamadığını paylaştı.
+
+### Sprint board ekran görüntüleri
+<img width="1714" alt="Screenshot 2024-07-21 at 15 32 24" src="https://github.com/user-attachments/assets/5e4ee390-d14c-45da-876d-4b6706393444">
+
+### Ürün Durumu
+- (Ekran görüntüleri buraya eklenmeli)
+
+### Sprint Review
+2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç veritabanı API'si bulundu ve entegre edildi. Ayrıca ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
+
+### Sprint Retrospective
+#### 3. Sprint için yapılması planlananlar:
+- Nöbetçi eczaneler API entegre edilecek.
+- Ecza kutusu ekranı kodlanacak.
+- Kamera ekranının kodlanması.
+- ML kit ile prospektüs veri tabanı entegrasyonu gerçekleştirilecek.
+- İlaç takip ekranı dışındaki diğer gerekli yerlerde notification sisteminin eklenmesi.
+- Ayrı şekilde yapılan çalışmaların birleştirilmesi ve uygulamanın teste hazır hale getirilmesi.
+- Kullanıcı deneyimi için 10 kişilik bir kitleye ulaşılması ve geri dönüşlerle gerekli güncellemelerin yapılması.
+
+#### Planlanan İyileştirmeler
+- Yapılan tasarımlarda marka kimliğinin çok öne çıkamaması nedeniyle 3. sprintte bu noktaya çalışılacaktır. Örneğin, uygulama ismi eklenecek, fontlar düzenlenecek, marka teması düzenlenecek.
+- 3. sprint planlama toplantısında iş dağılımı ekip üyelerinin yoğunluğu göz önüne alınarak daha doğru gerçekleştirilecektir ve planlanan puana ulaşılması hedeflenecektir.
