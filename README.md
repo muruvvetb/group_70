@@ -150,7 +150,7 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 
 #### İlaç Alarmı Ekranları
 <img src="https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c" width="300" alt="İlaç Alarmı Ekranı 1"/>
-<img src="https://github.com/user-attachments/assets/9e30aa4c-ef1c-4b2b-b415-c2cac4329fdd" width="300" alt="İlaç Alarmı Ekranı 2"/>
+<img src="https://github.com/user-attachments/assets/499af3ed-1adb-48b9-a5a2-055315503633" width="300" alt="İlaç Alarmı Ekranı 2"/>
 
 #### Yakındaki Eczaneler
 <img src="https://github.com/user-attachments/assets/33bc8aed-4ae0-415b-9c24-ea6f07bbf859" width="300" alt="Yakındaki Eczaneler"/>
@@ -159,7 +159,7 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 
 
 ### Sprint Review
-2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç veritabanı API'si bulundu ve entegre edildi. Ayrıca ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
+2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. ilaç veritabanı API'si bulundu. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
 
 ### Sprint Retrospective
 #### 3. Sprint için yapılması planlananlar:
@@ -173,4 +173,5 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 
 #### Planlanan İyileştirmeler
 - Yapılan tasarımlarda marka kimliğinin çok öne çıkamaması nedeniyle 3. sprintte bu noktaya çalışılacaktır. Örneğin, uygulama ismi eklenecek, fontlar düzenlenecek, marka teması düzenlenecek.
+- Kodlanan ekranların detaylarında birbirinden farklı olmamasına dikkat edilecek.
 - 3. sprint planlama toplantısında iş dağılımı ekip üyelerinin yoğunluğu göz önüne alınarak daha doğru gerçekleştirilecektir ve planlanan puana ulaşılması hedeflenecektir.
