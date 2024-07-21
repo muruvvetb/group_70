@@ -30,6 +30,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Anasayfa'),
         centerTitle: true,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.notification_important_sharp), onPressed: () {}),
+          IconButton(icon: Icon(Icons.search), onPressed: () {})
+        ],
       ),
       body: Column(
         children: [
