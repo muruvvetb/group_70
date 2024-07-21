@@ -142,10 +142,10 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 <img src="https://github.com/user-attachments/assets/16a61eaf-150b-40ce-9346-82c2cb30d653" width="300" alt="Giriş Ekranı 2"/>
 
 #### Ana Sayfa 
-![Ana sayfa](https://github.com/user-attachments/assets/0d292ea2-56e6-4855-bdbe-8435c8debead)
+<img src="https://github.com/user-attachments/assets/0d292ea2-56e6-4855-bdbe-8435c8debead" width="300" alt="Ana Sayfa"/>
 
 #### Kullanıcı Profili
-![Kullanıcı Profili](https://github.com/user-attachments/assets/57589e9a-3b26-4e1c-8b0b-f837dafa1df8)
+<img src="https://github.com/user-attachments/assets/57589e9a-3b26-4e1c-8b0b-f837dafa1df8" width="300" alt="Kullanıcı Profili"/>
 
 #### İlaç Alarmı Ekranları
 <img src="https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c" width="300" alt="İlaç Alarmı Ekranı 1"/>
