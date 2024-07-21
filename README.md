@@ -134,8 +134,15 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 <img width="1714" alt="Screenshot 2024-07-21 at 15 32 24" src="https://github.com/user-attachments/assets/5e4ee390-d14c-45da-876d-4b6706393444">
 
 ### Ürün Durumu
+Giriş Ekranları 
 ![WhatsApp Image 2024-07-21 at 17 50 24](https://github.com/user-attachments/assets/80f290e3-2b7c-43c0-93ac-8490505d06c1)
 ![WhatsApp Image 2024-07-21 at 17 50 25](https://github.com/user-attachments/assets/16a61eaf-150b-40ce-9346-82c2cb30d653)
+İlaç Alarmı ekranları
+![WhatsApp Image 2024-07-21 at 20 08 59 (1)](https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c)
+![WhatsApp Image 2024-07-21 at 20 08 59](https://github.com/user-attachments/assets/9e30aa4c-ef1c-4b2b-b415-c2cac4329fdd)
+Yakındaki Eczaneler
+<img width="329" alt="Screenshot 2024-07-21 at 22 25 42" src="https://github.com/user-attachments/assets/33bc8aed-4ae0-415b-9c24-ea6f07bbf859">
+
 
 ### Sprint Review
 2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç veritabanı API'si bulundu ve entegre edildi. Ayrıca ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
