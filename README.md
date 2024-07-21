@@ -130,8 +130,9 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 - Hibrit olarak WhatsApp ve Zoom üzerinden gerçekleştirildi.
 - Ekip üyeleri, günlük saat 13:00’da bir önceki gün neler yaptığını veya yapamadığını paylaştı.
 
-### Sprint board ekran görüntüleri
-<img width="1714" alt="Screenshot 2024-07-21 at 15 32 24" src="https://github.com/user-attachments/assets/5e4ee390-d14c-45da-876d-4b6706393444">
+### Sprint board ekran görüntüleri   
+<img width="1723" alt="Screenshot 2024-07-21 at 22 37 20" src="https://github.com/user-attachments/assets/a29dcc9e-b9c6-432e-acc5-7b814e613b56">
+
 
 
 ### Ürün Durumu
