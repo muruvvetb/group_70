@@ -1,3 +1,4 @@
+import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -127,6 +128,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 
+      bottomNavigationBar: CustomBottomNavigationBar(),
       /* Buradaki navigation bar ismail'in navigationbar'i kullanilacagi icin yorum satirina alindi. */
       // bottomNavigationBar: BottomAppBar(
       //   color: const Color(0xffD5E7F2),
