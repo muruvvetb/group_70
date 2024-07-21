@@ -136,16 +136,26 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 
 ### Ürün Durumu
 
+
 #### Giriş Ekranları
-![Giriş Ekranı 1](https://github.com/user-attachments/assets/80f290e3-2b7c-43c0-93ac-8490505d06c1)
-![Giriş Ekranı 2](https://github.com/user-attachments/assets/16a61eaf-150b-40ce-9346-82c2cb30d653)
+<img src="https://github.com/user-attachments/assets/80f290e3-2b7c-43c0-93ac-8490505d06c1" width="300" alt="Giriş Ekranı 1"/>
+<img src="https://github.com/user-attachments/assets/16a61eaf-150b-40ce-9346-82c2cb30d653" width="300" alt="Giriş Ekranı 2"/>
+
+#### Ana Sayfa 
+![Ana sayfa](https://github.com/user-attachments/assets/0d292ea2-56e6-4855-bdbe-8435c8debead)
+
+#### Kullanıcı Profili
+![Kullanıcı Profili](https://github.com/user-attachments/assets/57589e9a-3b26-4e1c-8b0b-f837dafa1df8)
 
 #### İlaç Alarmı Ekranları
-![İlaç Alarmı Ekranı 1](https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c)
-![İlaç Alarmı Ekranı 2](https://github.com/user-attachments/assets/9e30aa4c-ef1c-4b2b-b415-c2cac4329fdd)
+<img src="https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c" width="300" alt="İlaç Alarmı Ekranı 1"/>
+<img src="https://github.com/user-attachments/assets/9e30aa4c-ef1c-4b2b-b415-c2cac4329fdd" width="300" alt="İlaç Alarmı Ekranı 2"/>
 
 #### Yakındaki Eczaneler
-![Yakındaki Eczaneler](https://github.com/user-attachments/assets/33bc8aed-4ae0-415b-9c24-ea6f07bbf859)
+<img src="https://github.com/user-attachments/assets/33bc8aed-4ae0-415b-9c24-ea6f07bbf859" width="300" alt="Yakındaki Eczaneler"/>
+
+
+
 
 ### Sprint Review
 2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç veritabanı API'si bulundu ve entegre edildi. Ayrıca ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
