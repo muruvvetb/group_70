@@ -6,7 +6,6 @@ import 'package:cep_eczane/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
 
@@ -19,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false; // Add this state variable
+  bool isLoading = false;
 
   // Implement your sign-in logic here
   void signUserIn() async {
@@ -71,17 +70,33 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 const SizedBox(height: 20),
 
-                // Logo
-                Image.asset(
-                  'lib/images/logo.png',
-                  width: 300,
-                  height: 300,
+                // App Name & Logo
+                Stack(
+                  children: [
+                    Image.asset(
+                      'lib/images/logo.png',
+                      width: 300,
+                      height: 300,
+                    ),
+                    Positioned(
+                      top: 60,
+                      left: 70,
+                      child: Text(
+                        "Cep Eczanem",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 0),
 
                 const Text(
-                  "Giriş yap", // Updated text
+                  "Giriş yap",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -89,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
 
                 // Mail Kutusu
                 UsernameTextField(
@@ -98,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
 
                 // Şifre kutusu
                 PasswordTextField(
@@ -106,13 +121,13 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Şifre",
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
 
                 // Giriş yap buton
                 isLoading
                     ? CircularProgressIndicator()
                     : MyButton(
-                        text: "Giriş yap", // Button text updated here
+                        text: "Giriş yap",
                         onTap: signUserIn,
                       ),
 
@@ -147,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
 
                 // Divider
                 const SizedBox(
