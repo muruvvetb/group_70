@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cep_eczane/widgets/bottom_navigation_bar.dart'; // Dosya yolunu projenize göre düzenleyin
 import 'package:cep_eczane/widgets/pharmacy_tile.dart'; // PharmacyTile dosyasını import edin
+import 'package:cep_eczane/widgets/yakindaki_map.dart'; // Import the YakindakiMap widget
 
 class YakindakiEczaneler extends StatelessWidget {
   const YakindakiEczaneler({Key? key}) : super(key: key);
@@ -30,17 +31,12 @@ class YakindakiEczaneler extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Gri renkli kare Container
+            // Replace the grey square Container with the YakindakiMap widget
             Container(
               width: double.infinity,
               height: 400,
               color: Colors.grey,
-              child: const Center(
-                child: Text(
-                  'Gri Kare',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-              ),
+              child: MapPage(),
             ),
             const SizedBox(height: 20),
             // Metinlerin olduğu Container'lar
