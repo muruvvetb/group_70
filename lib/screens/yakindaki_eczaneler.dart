@@ -34,8 +34,7 @@ class YakindakiEczaneler extends StatelessWidget {
             // Replace the grey square Container with the YakindakiMap widget
             Container(
               width: double.infinity,
-              height: 400,
-              color: Colors.grey,
+              height: MediaQuery.of(context).size.height * 0.6, // Yüksekliği artırıyoruz
               child: MapPage(),
             ),
             const SizedBox(height: 20),

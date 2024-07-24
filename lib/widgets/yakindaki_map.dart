@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:cep_eczane/services/pharmacy_service.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -11,11 +12,14 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  final PharmacyService _pharmacyService = PharmacyService('24t2dDF8FxSx1NQ9Dp6OPOXa1ld503quqyhfjpjFJaHYaneuZJj2FGdSxb1V'); // API anahtarınızı buraya ekleyin
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
   List<LatLng> _pharmacies = [];
+  bool _showOnDuty = false;
+  bool _initialCameraPositionSet = false; // Yeni değişken
 
   @override
   void initState() {
@@ -26,19 +30,48 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _currentPosition == null
-          ? const Center(child: CircularProgressIndicator())
-          : GoogleMap(
-              onMapCreated: (GoogleMapController controller) {
-                _mapController.complete(controller);
-                // Remove any custom styling here
-              },
-              initialCameraPosition: CameraPosition(
-                target: _currentPosition!,
-                zoom: 14,
-              ),
-              markers: _createMarkers(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Sadece nöbetçi eczaneleri göster',
+                  style: TextStyle(fontSize: 16), // Metin stilini değiştirdik
+                ),
+                Switch(
+                  value: _showOnDuty,
+                  onChanged: (value) {
+                    setState(() {
+                      _showOnDuty = value;
+                      _fetchNearbyPharmacies();
+                    });
+                  },
+                  activeColor: Color(0xFF1F3C51), // Açıkken rengini değiştirdik
+                ),
+              ],
             ),
+          ),
+          Expanded(
+            child: _currentPosition == null
+                ? const Center(child: CircularProgressIndicator())
+                : GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      _mapController.complete(controller);
+                    },
+                    initialCameraPosition: CameraPosition(
+                      target: _currentPosition!,
+                      zoom: 14,
+                    ),
+                    markers: _createMarkers(),
+                    myLocationEnabled: true, // Kullanıcının mevcut konumunu göster
+                    myLocationButtonEnabled: true, // Kullanıcının konumuna gitme butonu
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -66,9 +99,12 @@ class _MapPageState extends State<MapPage> {
       if (currentLocation.latitude != null && currentLocation.longitude != null) {
         setState(() {
           _currentPosition = LatLng(currentLocation.latitude!, currentLocation.longitude!);
-          _cameraToPosition(_currentPosition!);
+          if (!_initialCameraPositionSet) {
+            _initialCameraPositionSet = true;
+            _cameraToPosition(_currentPosition!);
+            _fetchNearbyPharmacies();
+          }
         });
-        _fetchNearbyPharmacies();
       }
     });
   }
@@ -85,26 +121,27 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _fetchNearbyPharmacies() async {
-    // Mock data for nearby pharmacies. Replace this with actual API call.
-    // Assuming the API returns a list of pharmacies within a 1km radius
-    List<LatLng> pharmacies = [
-      LatLng(_currentPosition!.latitude - 0.002, _currentPosition!.longitude - 0.0035),
-      LatLng(_currentPosition!.latitude + 0.004, _currentPosition!.longitude - 0.0005),
-    ];
-
-    setState(() {
-      _pharmacies = pharmacies;
-    });
+    if (_currentPosition == null) return;
+    try {
+      final pharmacies = await _pharmacyService.fetchNearbyPharmacies(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        2000,
+        onDuty: _showOnDuty,
+      );
+      setState(() {
+        _pharmacies = pharmacies.map<LatLng>((pharmacy) {
+          return LatLng(pharmacy['latitude'], pharmacy['longitude']);
+        }).toList();
+      });
+    } catch (e) {
+      print('Failed to fetch pharmacies: $e');
+    }
   }
 
   Set<Marker> _createMarkers() {
     Set<Marker> markers = {
-      if (_currentPosition != null)
-        Marker(
-          markerId: MarkerId("_currentLocation"),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: _currentPosition!,
-        )
+      
     };
 
     for (LatLng pharmacy in _pharmacies) {
