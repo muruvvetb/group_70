@@ -2,6 +2,7 @@ import 'package:cep_eczane/components/google_button.dart';
 import 'package:cep_eczane/components/my_button.dart';
 import 'package:cep_eczane/components/password_textfield.dart';
 import 'package:cep_eczane/components/username_textfield.dart';
+import 'package:cep_eczane/pages/Forgot_password_page.dart';
 import 'package:cep_eczane/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,13 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false; // Hide loading indicator
       });
     }
+  }
+
+  void navigateToForgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+    );
   }
 
   @override
@@ -134,10 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 // Şifreni mi unuttun
-                Text(
-                  "Şifreni mi unuttun?",
-                  style: TextStyle(
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: navigateToForgotPassword, // Add the navigation function here
+                  child: Text(
+                    "Şifreni mi unuttun?",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
 
