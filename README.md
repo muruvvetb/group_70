@@ -101,3 +101,83 @@ Sprint’e ilk olarak bir tanışma toplantısı düzenleyip takım rollerine ka
 ### Sprint Retrospective
 
 İkinci sprintte uygulama tasarımının geliştirilmesine karar verilmiştir. Merve'nin logo tasarımını geliştirmesi planlanmıştır. ML Kit’in görselden yazı tanıma özelliği bazı ilaç ambalajlarında test edilecektir. Uygulamanın bazı sayfalarının (giriş yap, kaydol, ana sayfa, profil, GPS/harita özelliklerinin) kodlanmasıyla devam edilecektir. Prospektüs için uygun veritabanı bulunarak uygulamada kullanılacaktır. Uygulamanın backend kısmı için Firebase kullanılacaktır. Uygulamanın ilk dili olarak Türkçe belirlenmiştir. Eğer prospektüs veritabanı Türkçe bulunamazsa, uygulamanın ilk versiyonu İngilizce'ye çevrilebilir.
+
+
+
+## 2. Sprint Raporu
+
+### Sprint Notları
+
+- Anasayfa ve giriş ekranı kodlandı.
+- İlaç veritabanı API'si bulundu ve entegre edildi.
+- İlaç alarm görüntüleme ekranı kodlandı.
+- Kayıt ekranı ve alarm kurma ekranı kodlandı.
+- Veri tabanı tasarımı tamamlandı.
+- İlaç takip ekranındaki takvim widget tasarımında iyileştirmeler yapıldı.
+- Yakındaki nöbetçi eczaneler API'si geç bulunması nedeniyle önce yakındaki eczaneler olarak kodlandı. Nöbetçi eczaneler 3. sprintte entegre edilecek.
+- Kullanıcı profilinde değişikliklerin kaydedilmesi için gerekli buton eklendi.
+
+### Sprint içinde tamamlanması tahmin edilen puan
+- 167
+
+### Puan tamamlama mantığı
+- 2. sprint için öngörülen puan 149 idi.
+- Planlama toplantısında toplam puan 167 olarak belirlendi.
+- Yoğunluk nedeniyle tamamlanan puan 133 oldu.
+- Puan dağılımlarında yine Fibonacci sayıları kullanılmıştır. Puanlar ekip üyelerinin değerlendirdikleri iş yüküne göre dağıtılmıştır.
+
+### Daily Scrum
+- Hibrit olarak WhatsApp ve Zoom üzerinden gerçekleştirildi.
+- Ekip üyeleri, günlük saat 13:00’a kadar bir önceki gün neler yaptığını veya yapamadığını paylaştı.
+<img src="https://github.com/user-attachments/assets/3cd7e87f-4a14-4e53-a002-6b93e6798ff1" width="400" alt="whatsapp 1"/>
+<img src="https://github.com/user-attachments/assets/8d4775e4-a03e-416d-9eb5-7ea806bf61f0" width="400" alt="whatsapp 4"/>
+<img src="https://github.com/user-attachments/assets/771e6c90-2368-4073-981f-cd95bf44c483" width="400" alt="whatsapp 2"/>
+<img src="https://github.com/user-attachments/assets/1a38f067-f544-419f-8c6a-dc8f8c602298" width="400" alt="whatsapp 3"/>
+
+
+
+### Sprint board ekran görüntüleri   
+<img width="1723" alt="Screenshot 2024-07-21 at 22 37 20" src="https://github.com/user-attachments/assets/a29dcc9e-b9c6-432e-acc5-7b814e613b56">
+
+
+
+### Ürün Durumu
+
+
+#### Giriş Ekranları
+<img src="https://github.com/user-attachments/assets/80f290e3-2b7c-43c0-93ac-8490505d06c1" width="300" alt="Giriş Ekranı 1"/>
+<img src="https://github.com/user-attachments/assets/16a61eaf-150b-40ce-9346-82c2cb30d653" width="300" alt="Giriş Ekranı 2"/>
+
+#### Ana Sayfa 
+<img src="https://github.com/user-attachments/assets/0d292ea2-56e6-4855-bdbe-8435c8debead" width="300" alt="Ana Sayfa"/>
+
+#### Kullanıcı Profili
+<img src="https://github.com/user-attachments/assets/57589e9a-3b26-4e1c-8b0b-f837dafa1df8" width="300" alt="Kullanıcı Profili"/>
+
+#### İlaç Alarmı Ekranları
+<img src="https://github.com/user-attachments/assets/e5177d07-a715-4e57-871c-e77ed3f1f56c" width="300" alt="İlaç Alarmı Ekranı 1"/>
+<img src="https://github.com/user-attachments/assets/499af3ed-1adb-48b9-a5a2-055315503633" width="300" alt="İlaç Alarmı Ekranı 2"/>
+
+#### Yakındaki Eczaneler
+<img src="https://github.com/user-attachments/assets/33bc8aed-4ae0-415b-9c24-ea6f07bbf859" width="300" alt="Yakındaki Eczaneler"/>
+
+
+
+
+### Sprint Review
+2. sprint boyunca birçok önemli iş tamamlandı. Uygulamanın anasayfası ve giriş ekranı kodlandı, ilaç alarm görüntüleme ekranı, kullanıcı profili, kayıt ekranı ve alarm kurma ekranı kodlandı. ilaç veritabanı API'si bulundu. Yakındaki eczaneler ekranı da tamamlandı. Kamera ekranı ve ML kit ile prospektüs veri tabanı entegrasyonu gibi bazı işler planlandığı gibi tamamlanamadı ve nöbetçi eczaneler API entegrasyonu 3. sprintte yapılması planlandı. Yoğun iş temposuna rağmen, ekip başarılı bir şekilde belirlenen görevlerin büyük çoğunluğunu tamamladı.
+
+### Sprint Retrospective
+#### 3. Sprint için yapılması planlananlar:
+- Nöbetçi eczaneler API entegre edilecek.
+- Ecza kutusu ekranı kodlanacak.
+- Kamera ekranının kodlanması.
+- ML kit ile prospektüs veri tabanı entegrasyonu gerçekleştirilecek.
+- İlaç takip ekranı dışındaki diğer gerekli yerlerde notification sisteminin eklenmesi.
+- Ayrı şekilde yapılan çalışmaların birleştirilmesi ve uygulamanın teste hazır hale getirilmesi.
+- Kullanıcı deneyimi için 10 kişilik bir kitleye ulaşılması ve geri dönüşlerle gerekli güncellemelerin yapılması.
+
+#### Planlanan İyileştirmeler
+- Yapılan tasarımlarda marka kimliğinin çok öne çıkamaması nedeniyle 3. sprintte bu noktaya çalışılacaktır. Örneğin, uygulama ismi eklenecek, fontlar düzenlenecek, marka teması düzenlenecek.
+- Kodlanan ekranların detaylarında birbirinden farklı olmamasına dikkat edilecek.
+- 3. sprint planlama toplantısında iş dağılımı ekip üyelerinin yoğunluğu göz önüne alınarak daha doğru gerçekleştirilecektir ve planlanan puana ulaşılması hedeflenecektir.
