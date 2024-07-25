@@ -1,6 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    
     package="com.example.cep_eczane">
+    
+    <!-- Permissions added from the first file -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:label="cep_eczane"
         android:name="${applicationName}"
@@ -35,6 +43,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- API Key added from the first file -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB66UlgcMCSX-cPzFpdP5EcjyHGGseY3Wk"/>
     </application>
     
     <!-- Required to query activities that can process text, see:

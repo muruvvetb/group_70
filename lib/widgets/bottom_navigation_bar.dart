@@ -1,68 +1,58 @@
 import 'package:flutter/material.dart';
-
-/*
-import 'screens/home_screen.dart';
-import 'screens/medical_services_screen.dart';
-import 'screens/camera_screen.dart';
-import 'screens/notifications_screen.dart';
-import 'screens/profile_screen.dart';
-*/
+import 'package:cep_eczane/screens/home_screen.dart';
+import 'package:cep_eczane/screens/profile_page.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  final int selectedIndex;
+
+  const CustomBottomNavigationBar({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    // Arkadaşlarınız kendi ekranlarını hallettiklerinde aşağıdaki kodları aktif edebilirler
-    /*
     switch (index) {
       case 0:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomePage(selectedIndex: 0)),
         );
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MedicalServicesScreen()),
-        );
+        // Ecza Kutusu ekranı
         break;
       case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CameraScreen()),
-        );
+        // Kamera ekranı
         break;
       case 3:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const NotificationsScreen()),
-        );
+        // İlaç Alarmı ekranı
         break;
       case 4:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          MaterialPageRoute(builder: (context) => const ProfilePage(selectedIndex: 4)),
         );
         break;
     }
-    */
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.none, // Burada clipBehavior'ı değiştirdik
+      clipBehavior: Clip.none,
       children: [
         Container(
           height: 75,
@@ -80,7 +70,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 label: 'Ecza Kutusu',
               ),
               BottomNavigationBarItem(
-                icon: Container(), // Boş bir widget olarak bırakıyoruz
+                icon: Container(),
                 label: '',
               ),
               BottomNavigationBarItem(
@@ -95,19 +85,19 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             selectedItemColor: Colors.black,
             unselectedItemColor: Colors.black,
             backgroundColor: const Color(0xFFD5E7F2),
-            iconSize: 24, // İkonların boyutunu ayarlıyoruz
-            selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), // Seçili öğenin yazı boyutu
-            unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), // Seçili olmayan öğelerin yazı boyutu
+            iconSize: 24,
+            selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
         ),
         Positioned(
-          bottom: 35, // Yükseklik ayarları
-          left: MediaQuery.of(context).size.width / 2 - 28, // Ortaya hizalama
+          bottom: 35,
+          left: MediaQuery.of(context).size.width / 2 - 28,
           child: FloatingActionButton(
-            onPressed: () => _onItemTapped(2), // Kamera ikonuna tıklanma
-            backgroundColor: const Color(0xFF1F3C51), // Etrafındaki çemberin rengi
-            child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)), // Kamera ikonu
-            shape: const CircleBorder(), // Daire şeklinde buton
+            onPressed: () => _onItemTapped(2),
+            backgroundColor: const Color(0xFF1F3C51),
+            child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)),
+            shape: const CircleBorder(),
           ),
         ),
       ],
@@ -118,7 +108,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     final isSelected = _selectedIndex == index;
     return Container(
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF93ABBF) : Colors.transparent, // Seçili öğe arka plan rengi
+        color: isSelected ? const Color(0xFF93ABBF) : Colors.transparent,
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.all(8),

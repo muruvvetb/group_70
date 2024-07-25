@@ -4,7 +4,9 @@ import 'package:cep_eczane/widgets/pharmacy_tile.dart'; // PharmacyTile dosyası
 import 'package:cep_eczane/widgets/yakindaki_map.dart'; // Import the YakindakiMap widget
 
 class YakindakiEczaneler extends StatelessWidget {
-  const YakindakiEczaneler({Key? key}) : super(key: key);
+  final int selectedIndex;
+
+  const YakindakiEczaneler({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class YakindakiEczaneler extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(), // Burada çağırıyoruz
+      bottomNavigationBar: CustomBottomNavigationBar(selectedIndex: selectedIndex),
     );
   }
 }

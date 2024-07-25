@@ -1,28 +1,30 @@
-import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
+import 'package:cep_eczane/screens/yakindaki_eczaneler.dart'; // YakindakiEczaneler dosyasını import edin
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int selectedIndex;
+
+  const HomePage({super.key, required this.selectedIndex});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-
-  final List<Widget> _pages = [
-    Container(color: Colors.red),
-    Container(color: Colors.blue),
-    Container(color: Colors.black),
-    Container(color: Colors.pink),
-    Container(color: Colors.green),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,31 +41,46 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              // padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                      foregroundColor:
-                          WidgetStateProperty.all<Color>(Colors.white),
-                      backgroundColor: WidgetStateProperty.all(Colors.indigo),
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      padding: WidgetStateProperty.all<EdgeInsets>(
-                          EdgeInsets.symmetric(vertical: 20, horizontal: 20))),
-                  onPressed: () => {},
-                  child: Column(
-                    children: [
-                      Text("Yakindaki Eczaneler",
-                          style: TextStyle(fontSize: 20)),
-                      Image.asset(
-                        'icons/map.png', // Placeholder for the map
-                        // fit: BoxFit.cover,
-                        fit: BoxFit.fill,
-                      )
-                    ],
-                  )),
+            padding: const EdgeInsets.all(2.0),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                elevation: MaterialStateProperty.all<double>(0),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => YakindakiEczaneler(selectedIndex: _selectedIndex),
+                  ),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text("Yakındaki Eczaneler",
+                      style: TextStyle(fontSize: 20, color: Colors.black)),
+                  Container(
+                    width: double.infinity,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: const DecorationImage(
+                        image: AssetImage('icons/map.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Row(
@@ -75,13 +92,13 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                        foregroundColor:
-                            WidgetStateProperty.all<Color>(Colors.white),
-                        backgroundColor: WidgetStateProperty.all(Colors.green),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
-                        ))),
+                        ),
+                      ),
+                    ),
                     child: const Column(
                       children: [
                         Text(
@@ -89,11 +106,10 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(fontSize: 16, color: Colors.white),
                           textAlign: TextAlign.left,
                         ),
-                        // Icon(Icons.medication, size: 50),
+                        SizedBox(height: 10),
                         Image(
                           image: AssetImage('icons/medicine.png'),
                           height: 60,
-                          // width: 60,
                           fit: BoxFit.contain,
                         ),
                       ],
@@ -107,20 +123,21 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                        foregroundColor:
-                            WidgetStateProperty.all<Color>(Colors.white),
-                        backgroundColor:
-                            WidgetStateProperty.all(const Color(0xffC64A4A)),
-                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)))),
+                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                     child: const Column(
                       children: [
-                        Text('Sipariş ver', style: TextStyle(fontSize: 16)),
+                        Text('Sipariş ver',
+                            style: TextStyle(fontSize: 16, color: Colors.white)),
+                        SizedBox(height: 10),
                         Image(
                           image: AssetImage('icons/cart.png'),
                           height: 60,
-                          // width: 60,
                           fit: BoxFit.contain,
                         ),
                       ],
@@ -132,53 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
-      bottomNavigationBar: CustomBottomNavigationBar(),
-      /* Buradaki navigation bar ismail'in navigationbar'i kullanilacagi icin yorum satirina alindi. */
-      // bottomNavigationBar: BottomAppBar(
-      //   color: const Color(0xffD5E7F2),
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //     children: <Widget>[
-      //       _buildBottomNavigationBarItem(Icons.home, 'Anasayfa', 0),
-      //       _buildBottomNavigationBarItem(
-      //           Icons.local_pharmacy, 'Ecza Kutusu', 1),
-      //       _buildBottomNavigationBarItem(Icons.camera_alt, '', 2),
-      //       _buildBottomNavigationBarItem(Icons.alarm, 'İlaç Alarmı', 3),
-      //       _buildBottomNavigationBarItem(Icons.person, 'Profilim', 4),
-      //     ],
-      //   ),
-      // ),,
-    );
-  }
-
-  Widget _buildBottomNavigationBarItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: Flexible(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              decoration: isSelected
-                  ? BoxDecoration(
-                      // shape: BoxShape.circle,
-
-                      border: Border.all(
-                          color: const Color(0xff93ABBF), width: 0.0),
-                      borderRadius: BorderRadius.circular(20),
-                      color: const Color(0xff93ABBF),
-                    )
-                  : const BoxDecoration(),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-              child: Icon(icon, color: Colors.black),
-            ),
-            if (label.isNotEmpty) Text(label),
-          ],
-        ),
-      ),
+      bottomNavigationBar: CustomBottomNavigationBar(selectedIndex: _selectedIndex),
     );
   }
 }

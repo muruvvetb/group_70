@@ -23,6 +23,15 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
   bool agreeToTerms = false;
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameSurnameController.dispose();
+    super.dispose();
+  }
+
   void signUserUp() async {
     if (!agreeToTerms) {
       showErrorMessage("Okudum, kabul ediyorum'u işaretlemelisiniz");
@@ -39,31 +48,26 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: passwordController.text,
         );
-        // Registration successful, navigate to another page or do something else
       } else {
-        // Passwords don't match
         showErrorMessage("Passwords do not match");
       }
     } on FirebaseAuthException catch (e) {
-      // Handle FirebaseAuth exceptions
-      print("FirebaseAuth Error: ${e.message}");
       showErrorMessage("FirebaseAuth Error: ${e.message}");
     } catch (e) {
-      // Handle other exceptions
-      print("Error: $e");
       showErrorMessage("Error: $e");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
   void showErrorMessage(String message) {
-    // Implement your error message display logic here
-    // For example, showing a dialog or updating a text field
-    print("Error: $message");
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   void GoogleLogin() async {
@@ -73,17 +77,14 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       await AuthService().signInWithGoogle();
-      // Google sign-in successful, navigate to another page or do something else
-    } on FirebaseAuthException catch (e) {
-      print("FirebaseAuth Error: ${e.message}");
-      showErrorMessage("FirebaseAuth Error: ${e.message}");
     } catch (e) {
-      print("Error: $e");
-      showErrorMessage("Error: $e");
+      showErrorMessage("Google Sign-In Error: $e");
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -109,15 +110,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 300,
                     ),
                     Positioned(
-                      top: 70, // Adjust this value to position the text
-                      left: 70, // Adjust this value to position the text
+                      top: 70,
+                      left: 70,
                       child: Text(
                         "Cep Eczanem", 
                         style: TextStyle(
                           color: Colors.black, 
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
-                          
                         ),
                       ),
                     ),
