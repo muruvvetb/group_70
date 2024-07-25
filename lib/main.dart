@@ -1,12 +1,15 @@
+import 'dart:io';
+import 'package:cep_eczane/pages/Auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/yakindaki_eczaneler.dart'; // YakindakiEczaneler dosyasını import ediyoruz
-
 //import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -57,18 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(
-                height: 20), // Butonlar arasında biraz boşluk ekledik
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const YakindakiEczaneler()),
-                );
-              },
-              child: const Text('Yakındaki Eczaneler'),
-            ),
           ],
         ),
       ),
@@ -79,4 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
+} 
+
+
