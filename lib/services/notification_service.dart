@@ -1,96 +1,102 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> init() async {
+  NotificationService() {
+    _initializeNotifications();
+  }
+
+  Future<void> _initializeNotifications() async {
+    tz.initializeTimeZones(); // Initialize time zones
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification: (id, title, body, payload) async {},
-    );
-
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
+      iOS: DarwinInitializationSettings(),
     );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) async {
-        final String? payload = notificationResponse.payload;
-        if (payload != null) {
-          print('notification payload: $payload');
-        }
-      },
-    );
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> init() async {
+    await _initializeNotifications();
   }
 
   Future<void> showNotification(
     int id,
     String title,
     String body,
-    DateTime scheduledDate,
-    List<bool> days,
+    String payload,
   ) async {
-    for (int i = 0; i < days.length; i++) {
-      if (days[i]) {
-        final tz.TZDateTime scheduledNotificationDateTime =
-            _nextInstanceOfDayAndTime(scheduledDate, i);
-
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-          id + i,
-          title,
-          body,
-          scheduledNotificationDateTime,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'your_channel_id',
-              'your_channel_name',
-              channelDescription: 'your_channel_description',
-              importance: Importance.max,
-              priority: Priority.high,
-              showWhen: true,
-            ),
-            iOS: DarwinNotificationDetails(),
-          ),
-          androidAllowWhileIdle: true,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.wallClockTime,
-        );
-      }
-    }
-  }
-
-  tz.TZDateTime _nextInstanceOfDayAndTime(DateTime scheduledDate, int day) {
-    tz.TZDateTime scheduledDateTime = tz.TZDateTime(
-      tz.local,
-      scheduledDate.year,
-      scheduledDate.month,
-      scheduledDate.day,
-      scheduledDate.hour,
-      scheduledDate.minute,
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id', // Your channel ID
+      'your_channel_name', // Your channel name
+      channelDescription: 'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
     );
 
-    while (scheduledDateTime.weekday != day + 1) {
-      scheduledDateTime = scheduledDateTime.add(const Duration(days: 1));
-    }
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
 
+    await flutterLocalNotificationsPlugin.show(
+      id,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: payload,
+    );
+  }
+
+  Future<void> scheduleNotification(
+    int id,
+    String title,
+    String body,
+    DateTime scheduledDate,
+    String payload,
+  ) async {
+    final tz.TZDateTime scheduledDateTime =
+        tz.TZDateTime.from(scheduledDate, tz.local);
+
+    // Check if the scheduled date is in the future
     if (scheduledDateTime.isBefore(tz.TZDateTime.now(tz.local))) {
-      scheduledDateTime = scheduledDateTime.add(const Duration(days: 7));
+      throw ArgumentError('scheduledDate must be a date in the future');
     }
 
-    return scheduledDateTime;
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id', // Your channel ID
+      'your_channel_name', // Your channel name
+      channelDescription: 'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduledDateTime,
+      platformChannelSpecifics,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.wallClockTime,
+      payload: payload,
+    );
   }
 
   Future<void> cancelNotification(int id) async {

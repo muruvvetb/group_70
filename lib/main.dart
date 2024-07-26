@@ -6,9 +6,10 @@ import 'services/notification_service.dart';
 import 'screens/ilac_alarm_sayfasi.dart';
 
 void main() async {
+  tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  tz.initializeTimeZones();
+  //tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Europe/Istanbul'));
 
   final NotificationService notificationService = NotificationService();

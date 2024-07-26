@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Alarm {
+  static int _idCounter = 0;
+
+  final int id;
   String title;
   TimeOfDay time;
   List<bool> days;
@@ -15,7 +18,7 @@ class Alarm {
     this.startDate,
     this.endDate,
     this.isActive = true,
-  });
+  }) : id = _idCounter++;
 
   DateTime get startTime {
     return DateTime(startDate!.year, startDate!.month, startDate!.day,

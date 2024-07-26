@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import '../models/alarm.dart';
 import '../services/notification_service.dart';
 
 class AlarmEklemeSayfasi extends StatefulWidget {
   final NotificationService notificationService;
+  final Function(DateTime) onAlarmFinished;
 
-  const AlarmEklemeSayfasi({super.key, required this.notificationService});
+  const AlarmEklemeSayfasi({
+    Key? key,
+    required this.notificationService,
+    required this.onAlarmFinished,
+  }) : super(key: key);
 
   @override
   AlarmEklemeSayfasiState createState() => AlarmEklemeSayfasiState();
@@ -65,6 +71,41 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
     Future.microtask(() => _showTimePicker(context));
   }
 
+  void _scheduleNotification(Alarm newAlarm) {
+    if (_startDate == null) {
+      // Handle the case where _startDate is null
+      return;
+    }
+
+    DateTime scheduledDate = DateTime(
+      _startDate!.year,
+      _startDate!.month,
+      _startDate!.day,
+      _selectedTime.hour,
+      _selectedTime.minute,
+    );
+
+    if (scheduledDate.isBefore(DateTime.now())) {
+      // Handle the case where the scheduled date is in the past
+      return;
+    }
+
+    widget.notificationService.scheduleNotification(
+      newAlarm.id, // Use the alarm id
+      newAlarm.title,
+      'İlaç hatırlatıcı bildirimi', // body
+      scheduledDate,
+      'ilac_alarm', // payload
+    );
+
+    // Bildirim seçme işlevini doğrudan çağırmayın. Bu otomatik olarak tetiklenir.
+    // widget.notificationService.onSelectNotification('ilac_alarm');
+  }
+
+  void _onAlarmFinished(DateTime date) {
+    widget.onAlarmFinished(date);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,8 +144,10 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
               child: Text(
                 _startDate == null
                     ? 'Başlangıç Tarihi Seç'
-                    : 'Başlangıç: ${_startDate!.toLocal()}'.split(' ')[0],
-                style: const TextStyle(color: Colors.blue),
+                    : 'Başlangıç: ${DateFormat('dd-MM-yyyy').format(_startDate!)}',
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -113,8 +156,10 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
               child: Text(
                 _endDate == null
                     ? 'Bitiş Tarihi Seç'
-                    : 'Bitiş: ${_endDate!.toLocal()}'.split(' ')[0],
-                style: const TextStyle(color: Colors.blue),
+                    : 'Bitiş: ${DateFormat('dd-MM-yyyy').format(_endDate!)}',
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -128,6 +173,8 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
                   startDate: _startDate,
                   endDate: _endDate,
                 );
+
+                _scheduleNotification(newAlarm);
                 Navigator.pop(context, newAlarm);
               },
               style: ElevatedButton.styleFrom(

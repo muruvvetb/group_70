@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class TakvimWidget extends StatefulWidget {
   final DateTime initialSelectedDay;
   final Function(DateTime, DateTime) onDaySelected;
-  final List<DateTime> markedDates;
-  final List<DateTime> finishedDates;
+  final List<DateTime> markedDates; // Alarm zamanlarının olduğu günler
+  final List<DateTime> finishedDates; // Alarm zamanlarının geldiği günler
 
   const TakvimWidget({
     super.key,
@@ -22,12 +24,49 @@ class TakvimWidget extends StatefulWidget {
 class _TakvimWidgetState extends State<TakvimWidget> {
   late DateTime _focusedDay;
   late DateTime _selectedDay;
+  late List<DateTime> _markedDates;
+  late List<DateTime> _finishedDates;
 
   @override
   void initState() {
     super.initState();
     _focusedDay = widget.initialSelectedDay;
     _selectedDay = widget.initialSelectedDay;
+    _markedDates = List.from(widget.markedDates);
+    _finishedDates = List.from(widget.finishedDates);
+    tz.initializeTimeZones(); // Initialize time zones
+  }
+
+  @override
+  void didUpdateWidget(covariant TakvimWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.markedDates != oldWidget.markedDates) {
+      setState(() {
+        _markedDates = List.from(widget.markedDates);
+      });
+    }
+    if (widget.finishedDates != oldWidget.finishedDates) {
+      setState(() {
+        _finishedDates = List.from(widget.finishedDates);
+      });
+    }
+  }
+
+  bool _isAlarmTime(DateTime date) {
+    final now = tz.TZDateTime.now(tz.local);
+    for (var markedDate in _markedDates) {
+      if (isSameDay(markedDate, date) &&
+          now.isAfter(DateTime(
+            markedDate.year,
+            markedDate.month,
+            markedDate.day,
+            markedDate.hour,
+            markedDate.minute,
+          ))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -55,7 +94,7 @@ class _TakvimWidgetState extends State<TakvimWidget> {
           },
           calendarFormat: CalendarFormat.week,
           eventLoader: (day) {
-            return widget.markedDates
+            return _markedDates
                     .where((markedDay) => isSameDay(day, markedDay))
                     .isNotEmpty
                 ? ['marked']
@@ -64,23 +103,21 @@ class _TakvimWidgetState extends State<TakvimWidget> {
           calendarStyle: CalendarStyle(
             outsideDaysVisible: false,
             todayDecoration: BoxDecoration(
-              color: Colors.blue, // Bugünün rengi mavi
+              color: Colors.blue,
               shape: BoxShape.circle,
             ),
           ),
           daysOfWeekVisible: true,
-          headerVisible: false, // Navigation bar'ı kaldırmak için
+          headerVisible: false,
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               if (events.isNotEmpty) {
-                bool isFinished = widget.finishedDates.contains(day);
+                bool isAlarm = _isAlarmTime(day);
                 return Container(
                   margin: const EdgeInsets.all(6.0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: isFinished
-                        ? Colors.green
-                        : Colors.grey, // Alarmlar bittiyse yeşil, değilse gri
+                    color: isAlarm ? Colors.green : Colors.grey,
                     shape: BoxShape.circle,
                   ),
                   child: Text(
@@ -96,9 +133,8 @@ class _TakvimWidgetState extends State<TakvimWidget> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            _getMonthYearString(
-                _focusedDay), // Ay ve yıl ismi ile güncellemek için
-            style: const TextStyle(fontSize: 14), // Bold değil
+            _getMonthYearString(_focusedDay),
+            style: const TextStyle(fontSize: 14),
           ),
         ),
       ],

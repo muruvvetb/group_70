@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // DateFormat için gerekli paket
+import 'package:intl/intl.dart';
 import '../models/alarm.dart';
 import '../services/notification_service.dart';
 import '../widgets/ takvim_widget.dart';
@@ -43,6 +43,12 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
     return finishedDates;
   }
 
+  void _onAlarmFinished(DateTime date) {
+    setState(() {
+      _alarms.removeWhere((alarm) => alarm.startDate == date);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final markedDates = _getMarkedDates();
@@ -67,7 +73,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Align(
-              alignment: Alignment.centerLeft, // Sola yaslı
+              alignment: Alignment.centerLeft,
               child: Text(
                 'Alarmlar',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -76,20 +82,27 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0), // Sağdan ve soldan biraz boşluk
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               itemCount: _alarms.length,
               itemBuilder: (context, index) {
                 final alarm = _alarms[index];
-                final startTime = DateFormat('HH:mm').format(alarm.startTime);
+                final startTime = DateFormat('HH:mm').format(DateTime(
+                  _selectedDay.year,
+                  _selectedDay.month,
+                  _selectedDay.day,
+                  alarm.time.hour,
+                  alarm.time.minute,
+                ));
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0), // Her alarm öğesi arasında dikey boşluk
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Dismissible(
-                    key: Key(alarm.title),
+                    key: Key(
+                        '${alarm.id}_${alarm.title}_${alarm.startDate}_${alarm.time}'),
                     onDismissed: (direction) {
                       final removedAlarm = _alarms[index];
                       setState(() {
+                        widget.notificationService
+                            .cancelNotification(removedAlarm.id);
                         _alarms.removeAt(index);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -113,9 +126,8 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.blue[50], // Açık mavi arka plan
-                        borderRadius:
-                            BorderRadius.circular(10.0), // Oval köşeler
+                        color: const Color(0xFFD5E7F2),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: ListTile(
                         title: Text(
@@ -125,21 +137,30 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                           'Başlangıç: ${DateFormat.yMMMd().format(alarm.startDate!)} - Bitiş: ${DateFormat.yMMMd().format(alarm.endDate!)}',
                         ),
                         trailing: Switch(
-                          activeColor: Colors.blue, // Lacivert açıkken
-                          inactiveThumbColor: Colors.white, // Beyaz kapalıyken
+                          activeColor: Colors.blue,
+                          inactiveThumbColor: Colors.white,
                           value: alarm.isActive,
                           onChanged: (value) {
                             setState(() {
                               alarm.isActive = value;
                             });
                             if (value) {
-                              widget.notificationService.showNotification(
-                                index,
+                              widget.notificationService.scheduleNotification(
+                                alarm.id,
                                 'İlaç Hatırlatıcısı',
                                 alarm.title,
-                                DateTime.now(),
-                                alarm.days,
+                                DateTime(
+                                  _selectedDay.year,
+                                  _selectedDay.month,
+                                  _selectedDay.day,
+                                  alarm.time.hour,
+                                  alarm.time.minute,
+                                ),
+                                'test_payload',
                               );
+                            } else {
+                              widget.notificationService
+                                  .cancelNotification(alarm.id);
                             }
                           },
                         ),
@@ -153,7 +174,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue, // Lacivert arka plan
+        backgroundColor: const Color.fromARGB(255, 133, 187, 222),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
@@ -163,6 +184,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
             MaterialPageRoute(
               builder: (context) => AlarmEklemeSayfasi(
                 notificationService: widget.notificationService,
+                onAlarmFinished: _onAlarmFinished,
               ),
             ),
           );
@@ -175,7 +197,6 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
         },
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
