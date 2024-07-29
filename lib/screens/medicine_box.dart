@@ -6,18 +6,15 @@ import '../widgets/medicine_card.dart';
 import 'add_medicine.dart';
 import '../models/medicine.dart';
 import '../services/firestore_service.dart';
-import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 
 class MedicineBox extends StatefulWidget {
-  final int selectedIndex;
-  const MedicineBox({super.key, required this.selectedIndex});
+  const MedicineBox({super.key});
 
   @override
   _MedicineBoxState createState() => _MedicineBoxState();
 }
 
 class _MedicineBoxState extends State<MedicineBox> {
-  late int _selectedIndex;
   final PageStorageBucket _bucket = PageStorageBucket();
   String? _selectedType;
   late Stream<List<Medicine>> _medicineStream;
@@ -25,7 +22,6 @@ class _MedicineBoxState extends State<MedicineBox> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectedIndex;
     final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     _medicineStream = FirestoreService().getMedicines(userId);
   }
@@ -156,9 +152,6 @@ class _MedicineBoxState extends State<MedicineBox> {
         child: const Icon(Icons.add),
         shape: const CircleBorder(),
       ),
-      /*bottomNavigationBar:
-          CustomBottomNavigationBar(selectedIndex: _selectedIndex),
-    */
     );
   }
 }

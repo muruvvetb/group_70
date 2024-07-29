@@ -1,23 +1,7 @@
-import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
-  final int selectedIndex;
-
-  const ProfilePage({super.key, required this.selectedIndex});
-
-  @override
-  ProfilePageState createState() => ProfilePageState();
-}
-
-class ProfilePageState extends State<ProfilePage> {
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.selectedIndex;
-  }
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -132,8 +116,6 @@ class ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar:
-          CustomBottomNavigationBar(selectedIndex: _selectedIndex),
     );
   }
 }

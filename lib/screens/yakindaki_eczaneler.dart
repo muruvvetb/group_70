@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cep_eczane/widgets/bottom_navigation_bar.dart'; // Dosya yolunu projenize göre düzenleyin
 import 'package:cep_eczane/widgets/pharmacy_tile.dart'; // PharmacyTile dosyasını import edin
 import 'package:cep_eczane/widgets/yakindaki_map.dart'; // Import the YakindakiMap widget
 
 class YakindakiEczaneler extends StatelessWidget {
-  final int selectedIndex;
-
-  const YakindakiEczaneler({Key? key, required this.selectedIndex}) : super(key: key);
+  const YakindakiEczaneler({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +50,6 @@ class YakindakiEczaneler extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(selectedIndex: selectedIndex),
     );
   }
 }

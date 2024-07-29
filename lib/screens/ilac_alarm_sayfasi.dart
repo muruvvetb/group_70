@@ -4,16 +4,13 @@ import '../models/alarm.dart';
 import '../services/notification_service.dart';
 import '../widgets/ takvim_widget.dart';
 import 'alarm_ekleme_sayfasi.dart';
-import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 
 class IlacAlarmSayfasi extends StatefulWidget {
   final NotificationService notificationService;
-  final int selectedIndex;
 
   const IlacAlarmSayfasi({
     super.key,
     required this.notificationService,
-    required this.selectedIndex,
   });
 
   @override
@@ -21,7 +18,6 @@ class IlacAlarmSayfasi extends StatefulWidget {
 }
 
 class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
-  late int _selectedIndex;
   DateTime _selectedDay = DateTime.now();
   final List<Alarm> _alarms = [];
 
@@ -204,8 +200,6 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
         },
         child: const Icon(Icons.add),
       ),
-      // bottomNavigationBar:
-      //   CustomBottomNavigationBar(selectedIndex: _selectedIndex),
-    ); //
+    );
   }
 }

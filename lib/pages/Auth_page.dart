@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cep_eczane/screens/ilac_alarm_sayfasi.dart';
 import 'package:cep_eczane/services/notification_service.dart';
 import 'login_or_register_page.dart';
+import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  final NotificationService notificationService;
+
+  const AuthPage({super.key, required this.notificationService});
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +20,8 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user logged in
           if (snapshot.hasData) {
-            return const HomePage(
-              selectedIndex: 0,
-              //notificationService: notificationService,
+            return CustomBottomNavigationBar(
+              notificationService: notificationService,
             );
           }
           // user NOT logged in
@@ -31,4 +33,3 @@ class AuthPage extends StatelessWidget {
     );
   }
 }
-//notificationService: notificationService,
