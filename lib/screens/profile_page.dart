@@ -114,8 +114,10 @@ class ProfilePageState extends State<ProfilePage> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      backgroundColor: MaterialStateProperty.all(const Color(0xff1F3C51)),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all(const Color(0xff1F3C51)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -130,7 +132,8 @@ class ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(selectedIndex: _selectedIndex),
+      bottomNavigationBar:
+          CustomBottomNavigationBar(selectedIndex: _selectedIndex),
     );
   }
 }

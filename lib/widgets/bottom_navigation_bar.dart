@@ -5,10 +5,12 @@ import 'package:cep_eczane/screens/profile_page.dart';
 class CustomBottomNavigationBar extends StatefulWidget {
   final int selectedIndex;
 
-  const CustomBottomNavigationBar({Key? key, required this.selectedIndex}) : super(key: key);
+  const CustomBottomNavigationBar({Key? key, required this.selectedIndex})
+      : super(key: key);
 
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState();
+  _CustomBottomNavigationBarState createState() =>
+      _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
@@ -28,7 +30,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage(selectedIndex: 0)),
+          MaterialPageRoute(
+              builder: (context) => const HomePage(selectedIndex: 0)),
         );
         break;
       case 1:
@@ -43,7 +46,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       case 4:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ProfilePage(selectedIndex: 4)),
+          MaterialPageRoute(
+              builder: (context) => const ProfilePage(selectedIndex: 4)),
         );
         break;
     }
@@ -66,7 +70,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 label: 'Anasayfa',
               ),
               BottomNavigationBarItem(
-                icon: _buildIcon(Icons.medical_services_outlined, Icons.medical_services, 1),
+                icon: _buildIcon(
+                    Icons.medical_services_outlined, Icons.medical_services, 1),
                 label: 'Ecza Kutusu',
               ),
               BottomNavigationBarItem(
@@ -74,7 +79,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: _buildIcon(Icons.notifications_outlined, Icons.notifications, 3),
+                icon: _buildIcon(
+                    Icons.notifications_outlined, Icons.notifications, 3),
                 label: 'İlaç Alarmı',
               ),
               BottomNavigationBarItem(
@@ -86,8 +92,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             unselectedItemColor: Colors.black,
             backgroundColor: const Color(0xFFD5E7F2),
             iconSize: 24,
-            selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            selectedLabelStyle:
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            unselectedLabelStyle:
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
         ),
         Positioned(
@@ -96,7 +104,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           child: FloatingActionButton(
             onPressed: () => _onItemTapped(2),
             backgroundColor: const Color(0xFF1F3C51),
-            child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)),
+            child: const Icon(Icons.camera_alt,
+                size: 28, color: Color.fromARGB(255, 0, 0, 0)),
             shape: const CircleBorder(),
           ),
         ),

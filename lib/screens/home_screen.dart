@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(2.0),
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.transparent),
                 elevation: MaterialStateProperty.all<double>(0),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => YakindakiEczaneler(selectedIndex: _selectedIndex),
+                    builder: (context) =>
+                        YakindakiEczaneler(selectedIndex: _selectedIndex),
                   ),
                 );
               },
@@ -92,7 +94,8 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -123,7 +126,8 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -133,7 +137,8 @@ class _HomePageState extends State<HomePage> {
                     child: const Column(
                       children: [
                         Text('Sipariş ver',
-                            style: TextStyle(fontSize: 16, color: Colors.white)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
                         SizedBox(height: 10),
                         Image(
                           image: AssetImage('icons/cart.png'),
@@ -149,7 +154,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(selectedIndex: _selectedIndex),
+      bottomNavigationBar:
+          CustomBottomNavigationBar(selectedIndex: _selectedIndex),
     );
   }
 }
