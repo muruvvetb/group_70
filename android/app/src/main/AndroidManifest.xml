@@ -21,7 +21,7 @@
 
 
     <application
-        android:label="cep_eczane"
+        android:label="Cep Eczanem"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

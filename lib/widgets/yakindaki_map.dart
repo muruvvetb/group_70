@@ -1,25 +1,28 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:cep_eczane/services/pharmacy_service.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final Function(List<dynamic>) onPharmaciesFetched;
+
+  const MapPage({super.key, required this.onPharmaciesFetched});
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  final PharmacyService _pharmacyService = PharmacyService('24t2dDF8FxSx1NQ9Dp6OPOXa1ld503quqyhfjpjFJaHYaneuZJj2FGdSxb1V'); // API anahtarınızı buraya ekleyin
+  final PharmacyService _pharmacyService = PharmacyService('24t2dDF8FxSx1NQ9Dp6OPOXa1ld503quqyhfjpjFJaHYaneuZJj2FGdSxb1V');
   Location _locationController = Location();
   final Completer<GoogleMapController> _mapController = Completer<GoogleMapController>();
 
   LatLng? _currentPosition;
-  List<LatLng> _pharmacies = [];
+  List<dynamic> _pharmacies = [];
   bool _showOnDuty = false;
-  bool _initialCameraPositionSet = false; // Yeni değişken
+  bool _initialCameraPositionSet = false;
 
   @override
   void initState() {
@@ -33,13 +36,13 @@ class _MapPageState extends State<MapPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(1.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Sadece nöbetçi eczaneleri göster',
-                  style: TextStyle(fontSize: 16), // Metin stilini değiştirdik
+                  style: TextStyle(fontSize: 16),
                 ),
                 Switch(
                   value: _showOnDuty,
@@ -49,7 +52,7 @@ class _MapPageState extends State<MapPage> {
                       _fetchNearbyPharmacies();
                     });
                   },
-                  activeColor: Color(0xFF1F3C51), // Açıkken rengini değiştirdik
+                  activeColor: Color(0xFF1F3C51),
                 ),
               ],
             ),
@@ -66,8 +69,8 @@ class _MapPageState extends State<MapPage> {
                       zoom: 14,
                     ),
                     markers: _createMarkers(),
-                    myLocationEnabled: true, // Kullanıcının mevcut konumunu göster
-                    myLocationButtonEnabled: true, // Kullanıcının konumuna gitme butonu
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
                   ),
           ),
         ],
@@ -129,27 +132,47 @@ class _MapPageState extends State<MapPage> {
         2000,
         onDuty: _showOnDuty,
       );
+
+      final pharmaciesWithDistance = pharmacies.map((pharmacy) {
+        final distanceKm = _calculateDistance(
+          _currentPosition!.latitude,
+          _currentPosition!.longitude,
+          pharmacy['latitude'],
+          pharmacy['longitude'],
+        );
+        pharmacy['distanceKm'] = distanceKm;
+        return pharmacy;
+      }).toList();
+
       setState(() {
-        _pharmacies = pharmacies.map<LatLng>((pharmacy) {
-          return LatLng(pharmacy['latitude'], pharmacy['longitude']);
-        }).toList();
+        _pharmacies = pharmaciesWithDistance;
+        widget.onPharmaciesFetched(pharmaciesWithDistance);
       });
     } catch (e) {
       print('Failed to fetch pharmacies: $e');
     }
   }
 
-  Set<Marker> _createMarkers() {
-    Set<Marker> markers = {
-      
-    };
+ double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+  const p = 0.017453292519943295; // Pi/180
+  const c = cos;
+  final a = 0.5 - c((lat2 - lat1) * p) / 2 +
+      c(lat1 * p) * c(lat2 * p) *
+          (1 - c((lon2 - lon1) * p)) / 2;
+  final distance = 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
+  return double.parse(distance.toStringAsFixed(2)); // Round to 2 decimal places
+}
 
-    for (LatLng pharmacy in _pharmacies) {
+  Set<Marker> _createMarkers() {
+    Set<Marker> markers = {};
+
+    for (var pharmacy in _pharmacies) {
+      LatLng position = LatLng(pharmacy['latitude'], pharmacy['longitude']);
       markers.add(
         Marker(
-          markerId: MarkerId(pharmacy.toString()),
+          markerId: MarkerId(pharmacy['pharmacyID'].toString()),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          position: pharmacy,
+          position: position,
         ),
       );
     }
