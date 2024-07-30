@@ -34,6 +34,12 @@ dependencies:
   cloud_firestore: ^5.0.2
   cupertino_icons: ^1.0.6
 
+  gallery_picker: ^0.5.1
+  google_mlkit_text_recognition: ^0.13.0
+  image_cropper: ^7.1.0
+  image_picker: ^1.1.2
+
+
   google_maps_flutter: ^2.7.0
   flutter_polyline_points: ^2.1.0
   location: ^7.0.0
@@ -44,7 +50,6 @@ dependencies:
   firebase_core: ^3.2.0
   firebase_auth: ^5.1.2
   google_sign_in: ^6.2.1
-  image_picker: ^1.1.2
   uuid: ^4.4.2
   firebase_storage: ^12.1.1
   table_calendar: ^3.0.0
@@ -53,6 +58,7 @@ dependencies:
   intl: ^0.19.0
   rxdart: ^0.28.0
   permission_handler: ^11.3.1
+  screens: ^2.5.0
 
 
   
