@@ -1,9 +1,16 @@
+import 'dart:developer';
+import 'package:cep_eczane/screens/text_bulma.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cep_eczane/screens/home_screen.dart';
 import 'package:cep_eczane/screens/profile_page.dart';
 import 'package:cep_eczane/screens/ilac_alarm_sayfasi.dart';
 import 'package:cep_eczane/screens/medicine_box.dart';
 import 'package:cep_eczane/services/notification_service.dart';
+import 'package:cep_eczane/utils/image_cropper.dart';
+import 'package:cep_eczane/utils/image_picker_class.dart';
+import 'package:cep_eczane/widgets/dialog_widget.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final NotificationService notificationService;
@@ -25,10 +32,54 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+    if (index == 2) {
+      _showImagePickerModal();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+      _pageController.jumpToPage(index);
+    }
+  }
+
+  void _showImagePickerModal() {
+    imagePickerModal(context, onCameraTap: () {
+      log("Camera");
+      pickImage(source: ImageSource.camera).then((value) {
+        if (value != '') {
+          imageCropperView(value, context).then((value) {
+            if (value != '') {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => RecognizePage(
+                    path: value,
+                  ),
+                ),
+              );
+            }
+          });
+        }
+      });
+    }, onGalleryTap: () {
+      log("Gallery");
+      pickImage(source: ImageSource.gallery).then((value) {
+        if (value != '') {
+          imageCropperView(value, context).then((value) {
+            if (value != '') {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => RecognizePage(
+                    path: value,
+                  ),
+                ),
+              );
+            }
+          });
+        }
+      });
     });
-    _pageController.jumpToPage(index);
   }
 
   @override
@@ -44,7 +95,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         children: <Widget>[
           HomePage(),
           MedicineBox(),
-          Container(), // Placeholder for camera, replace with actual screen
+          Container(), // This remains empty as the modal will handle camera/gallery
           IlacAlarmPageWrapper(notificationService: widget.notificationService),
           ProfilePage(),
         ],

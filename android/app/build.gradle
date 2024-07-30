@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.cep_eczane"
-        minSdk = 23
+        minSdk = 25 //flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
@@ -54,3 +54,5 @@ android {
 flutter {
     source = "../.."
 }
+
+
