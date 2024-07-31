@@ -1,32 +1,47 @@
+import 'package:cep_eczane/services/notification_helper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationService {
+  // The singleton instance
+  static final NotificationService _instance = NotificationService._internal();
+  static final NotificationHelper _notificationHelper = NotificationHelper();
+  // Private constructor
+  NotificationService._internal();
+
+  // Factory constructor to return the same instance
+  factory NotificationService() {
+    return _instance;
+  }
+
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  NotificationService() {
-    _initializeNotifications();
-  }
-
-  Future<void> _initializeNotifications() async {
-    tz.initializeTimeZones(); // Initialize time zones
-
+  Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: DarwinInitializationSettings(),
-    );
+        InitializationSettings(android: initializationSettingsAndroid);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
+    );
   }
 
-  Future<void> init() async {
-    await _initializeNotifications();
+  Future<void> _onDidReceiveNotificationResponse(
+      NotificationResponse notificationResponse) async {
+    DateTime now = DateTime.now();
+    String ilac_adi = notificationResponse.payload.toString();
+    final String notificationDetails = now.toString() +
+        " tarihinde " +
+        ilac_adi +
+        " ilacinizi almaniz gerekmektedir";
+
+    print(notificationDetails);
+    await _notificationHelper.addNotification(notificationDetails);
   }
 
   Future<void> showNotification(

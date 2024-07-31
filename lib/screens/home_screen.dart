@@ -1,18 +1,35 @@
+import 'package:cep_eczane/screens/notifications_page.dart';
+import 'package:cep_eczane/services/notification_helper.dart';
+import 'package:cep_eczane/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cep_eczane/screens/yakindaki_eczaneler.dart'; // YakindakiEczaneler dosyasını import edin
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final NotificationService _notificationService = NotificationService();
+  final NotificationHelper _notificationHelper = NotificationHelper();
+
+  HomePage({super.key});
+
+  void main() async {
+    await NotificationService().init();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Anasayfa'),
+        title: const Text('Cep Eczanem'),
         centerTitle: true,
         actions: [
           IconButton(
-              icon: Icon(Icons.notification_important_sharp), onPressed: () {}),
+            icon: Icon(Icons.notification_important_sharp),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationsPage()),
+              );
+            },
+          ),
           IconButton(icon: Icon(Icons.search), onPressed: () {})
         ],
       ),
@@ -22,7 +39,8 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.transparent),
                 elevation: MaterialStateProperty.all<double>(0),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -70,7 +88,8 @@ class HomePage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -101,7 +120,8 @@ class HomePage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -111,7 +131,8 @@ class HomePage extends StatelessWidget {
                     child: const Column(
                       children: [
                         Text('Sipariş ver',
-                            style: TextStyle(fontSize: 16, color: Colors.white)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
                         SizedBox(height: 10),
                         Image(
                           image: AssetImage('icons/cart.png'),

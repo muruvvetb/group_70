@@ -91,12 +91,12 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
     }
 
     widget.notificationService.scheduleNotification(
-      newAlarm.id, // Use the alarm id
-      newAlarm.title,
-      'İlaç hatırlatıcı bildirimi', // body
-      scheduledDate,
-      'ilac_alarm', // payload
-    );
+        newAlarm.id, // Use the alarm id
+        newAlarm.title,
+        'İlaç hatırlatıcı bildirimi', // body
+        scheduledDate,
+        newAlarm.title // payload
+        );
 
     // Bildirim seçme işlevini doğrudan çağırmayın. Bu otomatik olarak tetiklenir.
     // widget.notificationService.onSelectNotification('ilac_alarm');
