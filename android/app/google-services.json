@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "536858787425",
+    "project_id": "cep-eczane",
+    "storage_bucket": "cep-eczane.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536858787425:android:8f6c5da28eb76657ed7420",
+        "android_client_info": {
+          "package_name": "com.example.cep_eczane"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdk22Y0r93o0PenMPYKdV8nQJPHsLRzlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

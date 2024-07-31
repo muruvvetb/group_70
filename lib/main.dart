@@ -1,68 +1,66 @@
+import 'package:cep_eczane/pages/Auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'firebase_options.dart';
+import 'firebase_options.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'services/notification_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
+  tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  tz.setLocalLocation(tz.getLocation('Europe/Istanbul'));
+
+  final NotificationService notificationService = NotificationService();
+  await notificationService.init();
+
+  // Request permissions
+  await _requestPermissions();
+
+  runApp(MyApp(notificationService: notificationService));
+}
+
+Future<void> _requestPermissions() async {
+  // Request notification permission
+  if (await Permission.notification.request().isGranted) {
+    // Either the permission was already granted before or the user just granted it.
+  } else {
+    // Handle the case when the user declines the permission
+    // You can show a dialog or message explaining why the permission is needed
+  }
+
+  // Request location permission if needed
+  if (await Permission.location.request().isGranted) {
+    // Either the permission was already granted before or the user just granted it.
+  } else {
+    // Handle the case when the user declines the permission
+    // You can show a dialog or message explaining why the permission is needed
+  }
+
+  // Request exact alarm permission if needed
+  if (await Permission.scheduleExactAlarm.request().isGranted) {
+    // The permission was granted
+  } else {
+    // Handle the case when the user declines the permission
+    // You can show a dialog or message explaining why the permission is needed
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final NotificationService notificationService;
+
+  const MyApp({super.key, required this.notificationService});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(title: 'Flutter Firebase Setup'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AuthPage(notificationService: notificationService),
     );
   }
 }
