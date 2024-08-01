@@ -4,18 +4,17 @@ import 'package:cep_eczane/screens/profile_page.dart';
 import 'package:cep_eczane/screens/ilac_alarm_sayfasi.dart';
 import 'package:cep_eczane/screens/medicine_box.dart';
 import 'package:cep_eczane/services/notification_service.dart';
-import 'package:cep_eczane/services/firestore_service.dart'; // FirestoreService import edildi
+import 'package:cep_eczane/services/firestore_service.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final NotificationService notificationService;
-  final FirestoreService
-      firestoreService; // FirestoreService parametresi eklendi
+  final FirestoreService firestoreService;
 
-  const CustomBottomNavigationBar(
-      {Key? key,
-      required this.notificationService,
-      required this.firestoreService})
-      : super(key: key); // FirestoreService parametresi eklendi
+  const CustomBottomNavigationBar({
+    Key? key,
+    required this.notificationService,
+    required this.firestoreService,
+  }) : super(key: key);
 
   @override
   _CustomBottomNavigationBarState createState() =>
@@ -55,8 +54,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           Container(), // Placeholder for camera, replace with actual screen
           IlacAlarmPageWrapper(
             notificationService: widget.notificationService,
-            firestoreService:
-                widget.firestoreService, // FirestoreService parametresi eklendi
+            firestoreService: widget.firestoreService,
           ),
           ProfilePage(),
         ],
@@ -64,7 +62,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) {
+          if (index != 2) {
+            _onItemTapped(index);
+          }
+        },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: _buildIcon(Icons.home_outlined, Icons.home, 0),
@@ -76,7 +78,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             label: 'Ecza Kutusu',
           ),
           BottomNavigationBarItem(
-            icon: Container(), // Empty space for floating action button
+            icon: Icon(Icons.camera_alt, size: 28, color: Color(0xFFD5E7F2)),
             label: '',
           ),
           BottomNavigationBarItem(
@@ -98,13 +100,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         unselectedLabelStyle:
             const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'cameraButton',
-        onPressed: () => _onItemTapped(2),
-        backgroundColor: const Color(0xFF1F3C51),
-        child: const Icon(Icons.camera_alt,
-            size: 28, color: Color.fromARGB(255, 0, 0, 0)),
-        shape: const CircleBorder(),
+      floatingActionButton: Transform.translate(
+        offset: Offset(0, 15),
+        child: FloatingActionButton(
+          onPressed: () => _onItemTapped(2),
+          backgroundColor: const Color(0xFF1F3C51),
+          shape: CircleBorder(),
+          child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -115,7 +118,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? const Color(0xFF93ABBF) : Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
+        shape: BoxShape.circle,
       ),
       padding: const EdgeInsets.all(8),
       child: Icon(isSelected ? filledIcon : outlineIcon),
@@ -125,21 +128,19 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
 class IlacAlarmPageWrapper extends StatelessWidget {
   final NotificationService notificationService;
-  final FirestoreService
-      firestoreService; // FirestoreService parametresi eklendi
+  final FirestoreService firestoreService;
 
-  const IlacAlarmPageWrapper(
-      {Key? key,
-      required this.notificationService,
-      required this.firestoreService})
-      : super(key: key); // FirestoreService parametresi eklendi
+  const IlacAlarmPageWrapper({
+    Key? key,
+    required this.notificationService,
+    required this.firestoreService,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IlacAlarmSayfasi(
       notificationService: notificationService,
-      firestoreService:
-          firestoreService, // FirestoreService parametresi eklendi
+      firestoreService: firestoreService,
     );
   }
 }

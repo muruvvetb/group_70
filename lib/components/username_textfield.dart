@@ -19,6 +19,7 @@ class UsernameTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.white),
@@ -28,7 +29,7 @@ class UsernameTextField extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          fillColor: Colors.grey[300],
+          fillColor: Color(0xFFF6F6F6),
           filled: true,
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey[500])

@@ -158,6 +158,7 @@ class _MedicineBoxState extends State<MedicineBox> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'addMedicine', // Add a unique hero tag here
         onPressed: () {
           Navigator.push(
             context,

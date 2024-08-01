@@ -2,9 +2,10 @@ import 'package:cep_eczane/components/google_button.dart';
 import 'package:cep_eczane/components/my_button.dart';
 import 'package:cep_eczane/components/password_textfield.dart';
 import 'package:cep_eczane/components/username_textfield.dart';
-import 'package:cep_eczane/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cep_eczane/services/auth_service.dart'; // Import AuthService
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -44,10 +45,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       if (passwordController.text == confirmPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
+
+        // Save the user's name and email in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+          'name': nameSurnameController.text,
+          'email': emailController.text,
+        });
       } else {
         showErrorMessage("Passwords do not match");
       }
@@ -99,32 +106,28 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: 0),
+                const SizedBox(height: 20),
 
-                // App Name & Logo
-                Stack(
-                  children: [
-                    Image.asset(
-                      'lib/images/logo.png',
-                      width: 300,
-                      height: 300,
-                    ),
-                    Positioned(
-                      top: 70,
-                      left: 70,
-                      child: Text(
-                        "Cep Eczanem", 
-                        style: TextStyle(
-                          color: Colors.black, 
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                // App Name
+                const Text(
+                  "Cep Eczanem",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
-                const SizedBox(height: 0),
+                const SizedBox(height: 20),
+
+                // App Logo
+                Image.asset(
+                  'lib/images/logo.png',
+                  width: 150,
+                  height: 150,
+                ),
+
+                const SizedBox(height: 20),
 
                 const Text(
                   "Kayıt ol",
@@ -144,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 15),
 
                 // Email TextField
                 UsernameTextField(
@@ -153,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: false,
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 15),
 
                 // Password TextField
                 PasswordTextField(
@@ -161,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   hintText: "Şifre",
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 15),
 
                 // Confirm Password TextField
                 PasswordTextField(
@@ -204,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTap: signUserUp,
                       ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
 
                 // Already have an account? Sign in
                 Row(
@@ -225,7 +228,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 10),
 
                 // Divider
                 const SizedBox(
@@ -236,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 15),
 
                 // Google Sign-In Button
                 GoogleButton(

@@ -10,13 +10,13 @@ import 'package:cep_eczane/services/firestore_service.dart'; // FirestoreService
 
 class AuthPage extends StatelessWidget {
   final NotificationService notificationService;
-  final FirestoreService
-      firestoreService; // FirestoreService parametresi eklendi
+  final FirestoreService firestoreService; // FirestoreService parametresi eklendi
 
-  const AuthPage(
-      {super.key,
-      required this.notificationService,
-      required this.firestoreService}); // FirestoreService parametresi eklendi
+  const AuthPage({
+    super.key,
+    required this.notificationService,
+    required this.firestoreService,
+  }); // FirestoreService parametresi eklendi
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return CustomBottomNavigationBar(
               notificationService: notificationService,
-              firestoreService:
-                  firestoreService, // FirestoreService parametresi eklendi
+              firestoreService: firestoreService, // FirestoreService parametresi eklendi
             );
           }
           // user NOT logged in

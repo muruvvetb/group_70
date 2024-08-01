@@ -5,6 +5,7 @@ import '../models/alarm.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // Medicine related methods
   Future<void> addMedicine(Medicine medicine) {
     return _db.collection('medicines').doc(medicine.id).set(medicine.toMap());
   }

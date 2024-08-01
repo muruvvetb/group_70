@@ -24,7 +24,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.grey[300],
+          color: Color(0xFFF6F6F6),
         ),
         child: TextFormField(
           controller: widget.controller,

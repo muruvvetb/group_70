@@ -78,30 +78,26 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 const SizedBox(height: 20),
 
-                // App Name & Logo
-                Stack(
-                  children: [
-                    Image.asset(
-                      'lib/images/logo.png',
-                      width: 300,
-                      height: 300,
-                    ),
-                    Positioned(
-                      top: 60,
-                      left: 70,
-                      child: Text(
-                        "Cep Eczanem",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                // App Name
+                const Text(
+                  "Cep Eczanem",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
-                const SizedBox(height: 0),
+                const SizedBox(height: 20),
+
+                // App Logo
+                Image.asset(
+                  'lib/images/logo.png',
+                  width: 150,
+                  height: 150,
+                ),
+
+                const SizedBox(height: 20),
 
                 const Text(
                   "Giriş yap",

@@ -32,6 +32,7 @@ void main() async {
           firestoreService)); // FirestoreService parametresi eklendi
 }
 
+
 Future<void> _requestPermissions() async {
   // Request notification permission
   if (await Permission.notification.request().isGranted) {

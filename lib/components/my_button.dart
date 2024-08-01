@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: isLoading ? null : onTap, // Disable onTap if loading
       child: Container(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.symmetric(vertical: 15), // Reduced vertical padding
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           color: const Color.fromARGB(206, 3, 45, 85),
