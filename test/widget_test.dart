@@ -3,14 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cep_eczane/main.dart';
 import 'package:cep_eczane/services/notification_service.dart';
+import 'package:cep_eczane/services/firestore_service.dart'; // FirestoreService import edildi
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // NotificationService oluşturun
     final notificationService = NotificationService();
 
-    // MyApp örneğini oluşturun ve notificationService parametresini sağlayın
-    await tester.pumpWidget(MyApp(notificationService: notificationService));
+    // FirestoreService oluşturun
+    final firestoreService = FirestoreService();
+
+    // MyApp örneğini oluşturun ve notificationService ile firestoreService parametrelerini sağlayın
+    await tester.pumpWidget(MyApp(
+      notificationService: notificationService,
+      firestoreService:
+          firestoreService, // FirestoreService parametresi eklendi
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

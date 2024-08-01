@@ -11,7 +11,7 @@ class NotificationService {
   }
 
   Future<void> _initializeNotifications() async {
-    tz.initializeTimeZones(); // Initialize time zones
+    tz.initializeTimeZones();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -37,8 +37,8 @@ class NotificationService {
   ) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'your_channel_id', // Your channel ID
-      'your_channel_name', // Your channel name
+      'your_channel_id',
+      'your_channel_name',
       channelDescription: 'your_channel_description',
       importance: Importance.max,
       priority: Priority.high,
@@ -64,19 +64,24 @@ class NotificationService {
     String body,
     DateTime scheduledDate,
     String payload,
+    bool isActive, // isActive durumunu parametre olarak ekliyoruz
   ) async {
+    if (!isActive) {
+      await cancelNotification(id); // Eğer isActive değilse bildirimi iptal et
+      return;
+    }
+
     final tz.TZDateTime scheduledDateTime =
         tz.TZDateTime.from(scheduledDate, tz.local);
 
-    // Check if the scheduled date is in the future
     if (scheduledDateTime.isBefore(tz.TZDateTime.now(tz.local))) {
       throw ArgumentError('scheduledDate must be a date in the future');
     }
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'your_channel_id', // Your channel ID
-      'your_channel_name', // Your channel name
+      'your_channel_id',
+      'your_channel_name',
       channelDescription: 'your_channel_description',
       importance: Importance.max,
       priority: Priority.high,
@@ -100,6 +105,11 @@ class NotificationService {
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+    try {
+      await flutterLocalNotificationsPlugin.cancel(id);
+      print('Notification $id canceled successfully.');
+    } catch (e) {
+      print('Error canceling notification $id: $e');
+    }
   }
 }

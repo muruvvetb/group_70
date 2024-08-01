@@ -5,6 +5,7 @@ import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'services/notification_service.dart';
+import 'services/firestore_service.dart'; // FirestoreService import edildi
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
@@ -19,10 +20,16 @@ void main() async {
   final NotificationService notificationService = NotificationService();
   await notificationService.init();
 
+  final FirestoreService firestoreService =
+      FirestoreService(); // FirestoreService oluşturuldu
+
   // Request permissions
   await _requestPermissions();
 
-  runApp(MyApp(notificationService: notificationService));
+  runApp(MyApp(
+      notificationService: notificationService,
+      firestoreService:
+          firestoreService)); // FirestoreService parametresi eklendi
 }
 
 Future<void> _requestPermissions() async {
@@ -53,14 +60,22 @@ Future<void> _requestPermissions() async {
 
 class MyApp extends StatelessWidget {
   final NotificationService notificationService;
+  final FirestoreService
+      firestoreService; // FirestoreService parametresi eklendi
 
-  const MyApp({super.key, required this.notificationService});
+  const MyApp(
+      {super.key,
+      required this.notificationService,
+      required this.firestoreService}); // FirestoreService parametresi eklendi
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(notificationService: notificationService),
+      home: AuthPage(
+          notificationService: notificationService,
+          firestoreService:
+              firestoreService), // FirestoreService parametresi eklendi
     );
   }
 }

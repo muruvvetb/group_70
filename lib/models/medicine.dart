@@ -17,6 +17,24 @@ class Medicine {
     required this.userId,
   });
 
+  Medicine copyWith({
+    String? id,
+    String? name,
+    int? count,
+    String? type,
+    String? imagePath,
+    String? userId,
+  }) {
+    return Medicine(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      count: count ?? this.count,
+      type: type ?? this.type,
+      imagePath: imagePath ?? this.imagePath,
+      userId: userId ?? this.userId,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

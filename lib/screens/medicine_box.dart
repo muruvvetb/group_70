@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
@@ -6,6 +7,8 @@ import '../widgets/medicine_card.dart';
 import 'add_medicine.dart';
 import '../models/medicine.dart';
 import '../services/firestore_service.dart';
+import 'alarm_ekleme_sayfasi.dart';
+import '../services/notification_service.dart';
 
 class MedicineBox extends StatefulWidget {
   const MedicineBox({super.key});
@@ -30,6 +33,30 @@ class _MedicineBoxState extends State<MedicineBox> {
     setState(() {
       _selectedType = type;
     });
+  }
+
+  Future<void> _addAlarm(BuildContext context, Medicine medicine) async {
+    final newAlarm = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AlarmEklemeSayfasi(
+          notificationService: NotificationService(),
+          onAlarmFinished: (date) {
+            setState(() {
+              final updatedMedicine =
+                  medicine.copyWith(count: medicine.count - 1);
+              FirestoreService().updateMedicine(updatedMedicine);
+            });
+          },
+          medicineName: medicine.name, // İlaç adı AlarmEklemeSayfasi'na geçildi
+        ),
+      ),
+    );
+
+    if (newAlarm != null) {
+      final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      FirestoreService().addAlarm(userId, newAlarm);
+    }
   }
 
   @override
@@ -120,6 +147,9 @@ class _MedicineBoxState extends State<MedicineBox> {
                         ),
                       ),
                     );
+                  },
+                  onAddAlarm: () {
+                    _addAlarm(context, medicine);
                   },
                 );
               },

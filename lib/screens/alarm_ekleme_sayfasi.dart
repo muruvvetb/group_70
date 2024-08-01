@@ -7,11 +7,13 @@ import '../services/notification_service.dart';
 class AlarmEklemeSayfasi extends StatefulWidget {
   final NotificationService notificationService;
   final Function(DateTime) onAlarmFinished;
+  final String medicineName; // İlaç adı eklendi
 
   const AlarmEklemeSayfasi({
     Key? key,
     required this.notificationService,
     required this.onAlarmFinished,
+    required this.medicineName, // İlaç adı parametresi eklendi
   }) : super(key: key);
 
   @override
@@ -23,6 +25,15 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
   DateTime _selectedTime = DateTime.now();
   DateTime? _startDate;
   DateTime? _endDate;
+  Alarm? newAlarm; // newAlarm nesnesi dışarıda tanımlandı
+
+  @override
+  void initState() {
+    super.initState();
+    _baslikController.text =
+        widget.medicineName; // İlaç adı varsayılan olarak ayarlandı
+    Future.microtask(() => _showTimePicker(context));
+  }
 
   Future<void> _selectDate(BuildContext context,
       {required bool isStartDate}) async {
@@ -65,15 +76,8 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() => _showTimePicker(context));
-  }
-
-  void _scheduleNotification(Alarm newAlarm) {
+  Future<void> _scheduleNotification() async {
     if (_startDate == null) {
-      // Handle the case where _startDate is null
       return;
     }
 
@@ -86,24 +90,29 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
     );
 
     if (scheduledDate.isBefore(DateTime.now())) {
-      // Handle the case where the scheduled date is in the past
       return;
     }
 
-    widget.notificationService.scheduleNotification(
-      newAlarm.id, // Use the alarm id
-      newAlarm.title,
-      'İlaç hatırlatıcı bildirimi', // body
-      scheduledDate,
-      'ilac_alarm', // payload
+    newAlarm = Alarm(
+      title: _baslikController.text,
+      time: TimeOfDay(hour: _selectedTime.hour, minute: _selectedTime.minute),
+      days: List.filled(7, false),
+      startDate: _startDate,
+      endDate: _endDate,
+      isActive: true,
     );
 
-    // Bildirim seçme işlevini doğrudan çağırmayın. Bu otomatik olarak tetiklenir.
-    // widget.notificationService.onSelectNotification('ilac_alarm');
-  }
+    await widget.notificationService.scheduleNotification(
+      0, // Bildirim ID'si, her alarm için benzersiz olmalıdır
+      _baslikController.text,
+      'İlaç hatırlatıcı bildirimi',
+      scheduledDate,
+      'ilac_alarm',
+      newAlarm!.isActive, // isActive argümanı eklendi
+    );
 
-  void _onAlarmFinished(DateTime date) {
-    widget.onAlarmFinished(date);
+    print('New Alarm Created: ${newAlarm!.toMap()}'); // Debug için
+    widget.onAlarmFinished(scheduledDate); // Alarm bitiş fonksiyonu çağrılır
   }
 
   @override
@@ -164,18 +173,10 @@ class AlarmEklemeSayfasiState extends State<AlarmEklemeSayfasi> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                final newAlarm = Alarm(
-                  title: _baslikController.text,
-                  time: TimeOfDay(
-                      hour: _selectedTime.hour, minute: _selectedTime.minute),
-                  days: List.filled(7, false),
-                  startDate: _startDate,
-                  endDate: _endDate,
-                );
-
-                _scheduleNotification(newAlarm);
-                Navigator.pop(context, newAlarm);
+              onPressed: () async {
+                await _scheduleNotification();
+                Navigator.pop(
+                    context, newAlarm); // newAlarm nesnesini geri döndür
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

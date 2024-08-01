@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/alarm.dart';
 import '../services/notification_service.dart';
 import '../widgets/ takvim_widget.dart';
 import 'alarm_ekleme_sayfasi.dart';
+import '../services/firestore_service.dart';
 
 class IlacAlarmSayfasi extends StatefulWidget {
   final NotificationService notificationService;
+  final FirestoreService firestoreService;
 
   const IlacAlarmSayfasi({
     super.key,
     required this.notificationService,
+    required this.firestoreService,
   });
 
   @override
@@ -19,7 +23,65 @@ class IlacAlarmSayfasi extends StatefulWidget {
 
 class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
   DateTime _selectedDay = DateTime.now();
-  final List<Alarm> _alarms = [];
+  List<Alarm> _alarms = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAlarms();
+  }
+
+  Future<void> _loadAlarms() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      widget.firestoreService.getAlarms(userId).listen((alarms) {
+        if (mounted) {
+          setState(() {
+            _alarms = alarms;
+          });
+        }
+      });
+    }
+  }
+
+  Future<void> _saveAlarm(Alarm alarm) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final firestoreId = await widget.firestoreService.addAlarm(userId, alarm);
+      if (mounted) {
+        setState(() {
+          alarm.firestoreId = firestoreId;
+        });
+      }
+    }
+  }
+
+  Future<void> _updateAlarm(Alarm alarm) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      await widget.firestoreService.updateAlarm(userId, alarm);
+    }
+  }
+
+  Future<void> _deleteAlarm(String firestoreId, int notificationId) async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      try {
+        await widget.notificationService.cancelNotification(notificationId);
+        await widget.firestoreService.deleteAlarm(userId, firestoreId);
+        print("Alarm başarıyla silindi: $firestoreId");
+      } catch (e) {
+        print("Alarm silinirken bir hata oluştu: $e");
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Alarm silinirken bir hata oluştu: $e'),
+            ),
+          );
+        }
+      }
+    }
+  }
 
   List<DateTime> _getMarkedDates() {
     final markedDates = <DateTime>[];
@@ -47,9 +109,11 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
   }
 
   void _onAlarmFinished(DateTime date) {
-    setState(() {
-      _alarms.removeWhere((alarm) => alarm.startDate == date);
-    });
+    if (mounted) {
+      setState(() {
+        _alarms.removeWhere((alarm) => alarm.startDate == date);
+      });
+    }
   }
 
   @override
@@ -66,9 +130,11 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
           TakvimWidget(
             initialSelectedDay: _selectedDay,
             onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-              });
+              if (mounted) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                });
+              }
             },
             markedDates: markedDates,
             finishedDates: finishedDates,
@@ -100,19 +166,39 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
                   child: Dismissible(
                     key: Key(
-                        '${alarm.id}_${alarm.title}_${alarm.startDate}_${alarm.time}'),
-                    onDismissed: (direction) {
+                        '${alarm.firestoreId}_${alarm.title}_${alarm.startDate}_${alarm.time}'),
+                    onDismissed: (direction) async {
                       final removedAlarm = _alarms[index];
-                      setState(() {
-                        widget.notificationService
-                            .cancelNotification(removedAlarm.id);
-                        _alarms.removeAt(index);
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${removedAlarm.title} silindi'),
-                        ),
-                      );
+                      if (mounted) {
+                        setState(() {
+                          _alarms.removeAt(index);
+                        });
+                      }
+                      try {
+                        await _deleteAlarm(
+                            removedAlarm.firestoreId!, removedAlarm.id);
+
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${removedAlarm.title} silindi'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          setState(() {
+                            _alarms.insert(index,
+                                removedAlarm); // Hata durumunda alarmı geri ekleyin
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:
+                                  Text('Alarm silinirken bir hata oluştu: $e'),
+                            ),
+                          );
+                        }
+                      }
                     },
                     direction: DismissDirection.endToStart,
                     background: Container(
@@ -143,12 +229,14 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                           activeColor: Colors.blue,
                           inactiveThumbColor: Colors.white,
                           value: alarm.isActive,
-                          onChanged: (value) {
+                          onChanged: (value) async {
+                            if (!mounted) return;
                             setState(() {
                               alarm.isActive = value;
                             });
                             if (value) {
-                              widget.notificationService.scheduleNotification(
+                              await widget.notificationService
+                                  .scheduleNotification(
                                 alarm.id,
                                 'İlaç Hatırlatıcısı',
                                 alarm.title,
@@ -160,10 +248,25 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                                   alarm.time.minute,
                                 ),
                                 'test_payload',
+                                alarm.isActive, // isActive durumunu ekliyoruz
                               );
+                              print(
+                                  'Notification scheduled for alarm ID: ${alarm.id}');
                             } else {
-                              widget.notificationService
+                              await widget.notificationService
                                   .cancelNotification(alarm.id);
+                              print(
+                                  'Notification canceled for alarm ID: ${alarm.id}');
+                            }
+                            await _updateAlarm(
+                                alarm); // Alarm Firestore'da güncellenir
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      '${alarm.title} alarmı ${value ? 'açıldı' : 'kapandı'}'),
+                                ),
+                              );
                             }
                           },
                         ),
@@ -188,14 +291,18 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
               builder: (context) => AlarmEklemeSayfasi(
                 notificationService: widget.notificationService,
                 onAlarmFinished: _onAlarmFinished,
+                medicineName: "İlaç Adı",
               ),
             ),
           );
 
           if (newAlarm != null) {
-            setState(() {
-              _alarms.add(newAlarm);
-            });
+            if (mounted) {
+              setState(() {
+                _alarms.add(newAlarm);
+              });
+            }
+            await _saveAlarm(newAlarm);
           }
         },
         child: const Icon(Icons.add),

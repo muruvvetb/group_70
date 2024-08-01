@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import '../components/colors.dart';
 
 class MedicineCard extends StatelessWidget {
@@ -9,6 +9,7 @@ class MedicineCard extends StatelessWidget {
   final String type;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final VoidCallback onAddAlarm; // Yeni eklenen callback
 
   const MedicineCard({
     required this.imagePath,
@@ -17,6 +18,7 @@ class MedicineCard extends StatelessWidget {
     required this.type,
     required this.onDelete,
     required this.onEdit,
+    required this.onAddAlarm, // Yeni eklenen callback
     Key? key,
   }) : super(key: key);
 
@@ -84,6 +86,8 @@ class MedicineCard extends StatelessWidget {
                   onEdit();
                 } else if (result == 'delete') {
                   onDelete();
+                } else if (result == 'add_alarm') {
+                  onAddAlarm(); // Alarm ekle callback
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -94,6 +98,10 @@ class MedicineCard extends StatelessWidget {
                 const PopupMenuItem<String>(
                   value: 'delete',
                   child: Text('Sil'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'add_alarm',
+                  child: Text('Alarm Ekle'), // Yeni eklenen seçenek
                 ),
               ],
             ),
