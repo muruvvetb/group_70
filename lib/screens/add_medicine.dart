@@ -160,7 +160,8 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 onPressed: _saveForm,
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.blue), // Buton rengi mavi
+                      const Color.fromARGB(255, 133, 187, 222)), // Buton rengi mavi
+
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -168,7 +169,10 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     ),
                   ),
                 ),
-                child: const Text('Kaydet'),
+                child: const Text(
+                  'Kaydet',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ],
           ),

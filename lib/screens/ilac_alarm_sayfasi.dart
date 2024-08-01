@@ -226,7 +226,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
                           'Başlangıç: ${DateFormat.yMMMd().format(alarm.startDate!)} - Bitiş: ${DateFormat.yMMMd().format(alarm.endDate!)}',
                         ),
                         trailing: Switch(
-                          activeColor: Colors.blue,
+                          activeColor: const Color.fromARGB(255, 133, 187, 222),
                           inactiveThumbColor: Colors.white,
                           value: alarm.isActive,
                           onChanged: (value) async {

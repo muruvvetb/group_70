@@ -179,7 +179,7 @@ class _MedicineBoxState extends State<MedicineBox> {
             ),
           );
         },
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 133, 187, 222),
         child: const Icon(Icons.add),
         shape: const CircleBorder(),
       ),
