@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'search_history.dart'; // Import the search history model
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'search_history.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -11,6 +12,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<String> _filteredHistory = [];
+  List<Map<String, dynamic>> _searchResults = [];
 
   @override
   void initState() {
@@ -18,12 +20,33 @@ class _SearchScreenState extends State<SearchScreen> {
     _filteredHistory = SearchHistory.history;
   }
 
-  void _onSearchChanged(String value) {
+  void _onSearchChanged(String query) async {
     setState(() {
       _filteredHistory = SearchHistory.history
-          .where((query) => query.toLowerCase().contains(value.toLowerCase()))
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+
+    if (query.isNotEmpty) {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Prospectuses')
+          .where('medicine_name', isGreaterThanOrEqualTo: query)
+          .where('medicine_name', isLessThanOrEqualTo: query + '\uf8ff')
+          .get();
+
+      setState(() {
+        _searchResults = snapshot.docs
+            .map((doc) => {
+                  'medicine_name': doc['medicine_name'],
+                  'content': doc['content'],
+                })
+            .toList();
+      });
+    } else {
+      setState(() {
+        _searchResults = [];
+      });
+    }
   }
 
   void _onSearchSubmitted(String value) {
@@ -31,6 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
       SearchHistory.add(value);
       _searchController.clear();
       _filteredHistory = SearchHistory.history;
+      _onSearchChanged(value);
     });
   }
 
@@ -39,6 +63,18 @@ class _SearchScreenState extends State<SearchScreen> {
       SearchHistory.clear();
       _filteredHistory = [];
     });
+  }
+
+  void _showProspectus(String content) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Text(content),
+        ),
+      ),
+    );
   }
 
   @override
@@ -73,6 +109,19 @@ class _SearchScreenState extends State<SearchScreen> {
               onSubmitted: _onSearchSubmitted,
             ),
             const SizedBox(height: 20),
+            if (_searchResults.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    final result = _searchResults[index];
+                    return ListTile(
+                      title: Text(result['medicine_name']),
+                      onTap: () => _showProspectus(result['content']),
+                    );
+                  },
+                ),
+              ),
             if (_searchController.text.isEmpty)
               Expanded(
                 child: ListView.builder(
@@ -83,6 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       title: Text(query),
                       onTap: () {
                         _searchController.text = query;
+                        _onSearchChanged(query);
                       },
                     );
                   },

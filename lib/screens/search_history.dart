@@ -21,4 +21,3 @@ class SearchHistory {
     _history.remove(query);
   }
 }
-aaaaa
