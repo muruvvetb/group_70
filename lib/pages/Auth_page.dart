@@ -7,7 +7,6 @@ import 'package:cep_eczane/services/notification_service.dart';
 import 'login_or_register_page.dart';
 import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
 import 'package:cep_eczane/services/firestore_service.dart';
-import 'package:cep_eczane/screens/guest_home_page.dart';
 
 class AuthPage extends StatelessWidget {
   final NotificationService notificationService;
@@ -37,14 +36,10 @@ class AuthPage extends StatelessWidget {
 
           // User logged in
           if (snapshot.hasData) {
-            if (snapshot.data!.isAnonymous) {
-              return GuestHomePage();
-            } else {
-              return CustomBottomNavigationBar(
-                notificationService: notificationService,
-                firestoreService: firestoreService,
-              );
-            }
+            return CustomBottomNavigationBar(
+              notificationService: notificationService,
+              firestoreService: firestoreService,
+            );
           }
 
           // User NOT logged in

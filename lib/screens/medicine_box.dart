@@ -21,12 +21,18 @@ class _MedicineBoxState extends State<MedicineBox> {
   final PageStorageBucket _bucket = PageStorageBucket();
   String? _selectedType;
   late Stream<List<Medicine>> _medicineStream;
+  int _medicineCount = 0; // İlaç sayısını takip etmek için sayaç
 
   @override
   void initState() {
     super.initState();
     final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     _medicineStream = FirestoreService().getMedicines(userId);
+    _medicineStream.listen((medicines) {
+      setState(() {
+        _medicineCount = medicines.length; // İlaç sayısını güncelle
+      });
+    });
   }
 
   void _filterMedicines(String? type) {
@@ -59,11 +65,42 @@ class _MedicineBoxState extends State<MedicineBox> {
     }
   }
 
+  void _showLimitReachedDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Sınıra Ulaşıldı',
+          textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          'Misafir olarak en fazla 2 ilaç ekleyebilirsiniz.',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text(
+                'Tamam',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 133, 187, 222), // Yazı rengi
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ecza Kutusu'),
+        title: const Center(child: Text('Ecza Kutusu')),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -158,26 +195,31 @@ class _MedicineBoxState extends State<MedicineBox> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        heroTag: 'addMedicine', // Add a unique hero tag here
+        heroTag: 'addMedicine',
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddMedicineScreen(
-                onAddMedicine: (medicine) {
-                  final newMedicine = Medicine(
-                    id: const Uuid().v4(),
-                    name: medicine.name,
-                    count: medicine.count,
-                    type: medicine.type,
-                    imagePath: medicine.imagePath,
-                    userId: FirebaseAuth.instance.currentUser?.uid ?? '',
-                  );
-                  FirestoreService().addMedicine(newMedicine);
-                },
+          if (FirebaseAuth.instance.currentUser!.isAnonymous &&
+              _medicineCount >= 2) {
+            _showLimitReachedDialog(); // Misafir kullanıcı limiti aştıysa uyarı göster
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddMedicineScreen(
+                  onAddMedicine: (medicine) {
+                    final newMedicine = Medicine(
+                      id: const Uuid().v4(),
+                      name: medicine.name,
+                      count: medicine.count,
+                      type: medicine.type,
+                      imagePath: medicine.imagePath,
+                      userId: FirebaseAuth.instance.currentUser?.uid ?? '',
+                    );
+                    FirestoreService().addMedicine(newMedicine);
+                  },
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
         backgroundColor: const Color.fromARGB(255, 133, 187, 222),
         child: const Icon(Icons.add),

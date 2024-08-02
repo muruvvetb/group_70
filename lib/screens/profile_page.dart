@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore package
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +16,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _currentPasswordController =
+      TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   File? _image;
@@ -24,8 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isNewPasswordVisible = false;
   bool _isEditingName = false;
   bool _isEditingEmail = false;
-  String _nameHint = "";
-  String _emailHint = "";
   late SharedPreferences _prefs;
 
   @override
@@ -33,17 +32,43 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     _loadUserProfile();
     _loadImage();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null && !user.isAnonymous) {
+        _loadUserProfile();
+      }
+    });
+    if (FirebaseAuth.instance.currentUser!.isAnonymous) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showAnonymousWarningDialog();
+      });
+    }
   }
 
   Future<void> _loadUserProfile() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
       if (userDoc.exists) {
-        setState(() {
-          _nameController.text = userDoc['name'] ?? '';
-          _emailController.text = user.email ?? '';
+        if (mounted) {
+          setState(() {
+            _nameController.text = userDoc['name'] ?? '';
+            _emailController.text = user.email ?? '';
+          });
+        }
+      } else {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'name': user.displayName ?? '',
+          'email': user.email ?? '',
         });
+        if (mounted) {
+          setState(() {
+            _nameController.text = user.displayName ?? '';
+            _emailController.text = user.email ?? '';
+          });
+        }
       }
     }
   }
@@ -52,18 +77,22 @@ class _ProfilePageState extends State<ProfilePage> {
     _prefs = await SharedPreferences.getInstance();
     String? imagePath = _prefs.getString('profile_image');
     if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
+      if (mounted) {
+        setState(() {
+          _image = File(imagePath);
+        });
+      }
     }
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      if (mounted) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
       _prefs.setString('profile_image', pickedFile.path);
     }
   }
@@ -100,9 +129,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _uploadImage() async {
     if (_image != null) {
-      // Implement image upload functionality if needed
       final fileName = path.basename(_image!.path);
-      // Upload image logic
+      // Resmi yükleme işlemi buraya eklenebilir
     }
   }
 
@@ -120,11 +148,112 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).popUntil((route) => route.isFirst); // Navigate back to the first route in the stack
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
+  Future<void> _convertAnonymousUser(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.currentUser!
+          .linkWithCredential(EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      ));
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'name': _nameController.text.trim(),
+        'email': email,
+      });
+
+      if (mounted) {
+        setState(() {
+          _nameController.text = _nameController.text.trim();
+          _emailController.text = email;
+        });
+      }
+
+      _showSuccessDialog("Hesabınız başarıyla kaydedildi!");
+    } on FirebaseAuthException catch (e) {
+      print("Hata: $e");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Hata: ${e.message}")),
+        );
+      }
+    }
   }
 
   void _saveProfile() {
-    // Handle saving profile logic
+    if (FirebaseAuth.instance.currentUser!.isAnonymous) {
+      _convertAnonymousUser(
+          _emailController.text.trim(), _newPasswordController.text.trim());
+    } else {
+      _showSuccessDialog("Hesabınız başarıyla güncellendi!");
+    }
+  }
+
+  void _showAnonymousWarningDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Dikkat',
+          textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          'Bir sonraki girişte verilerinizi kaybetmemek için kayıt olun!',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text(
+                'Tamam',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 133, 187, 222), // Yazı rengi
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Başarılı',
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text(
+                'Tamam',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 133, 187, 222), // Yazı rengi
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -146,21 +275,26 @@ class _ProfilePageState extends State<ProfilePage> {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  height: 100, // Increased height to extend the blue part
+                  height: 100,
                   decoration: const BoxDecoration(color: Color(0xff1F3C51)),
                 ),
                 Positioned(
-                  top: 25, // Adjusted top position to center the avatar
+                  top: 25,
                   left: MediaQuery.of(context).size.width / 2 - 75,
                   child: GestureDetector(
                     onTap: _showImageOptions,
                     child: CircleAvatar(
-                      radius: 75, // Increased radius
-                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      radius: 75,
+                      backgroundImage:
+                          _image != null ? FileImage(_image!) : null,
+                      backgroundColor: _image == null ? Colors.grey : null,
                       child: _image == null
                           ? Text(
-                              'I',
-                              style: const TextStyle(fontSize: 40, color: Colors.white),
+                              _nameController.text.isNotEmpty
+                                  ? _nameController.text[0].toUpperCase()
+                                  : 'U',
+                              style: const TextStyle(
+                                  fontSize: 40, color: Colors.white),
                             )
                           : null,
                     ),
@@ -190,7 +324,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               hintText: 'Ad Soyad',
                               hintStyle: TextStyle(color: Colors.grey[500]),
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
+                              contentPadding: const EdgeInsets.fromLTRB(
+                                  16.0, 16.0, 0.0, 16.0),
                             ),
                             style: const TextStyle(color: Colors.grey),
                           ),
@@ -218,13 +353,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               hintText: 'Email',
                               hintStyle: TextStyle(color: Colors.grey[500]),
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
+                              contentPadding: const EdgeInsets.fromLTRB(
+                                  16.0, 16.0, 0.0, 16.0),
                             ),
                             style: const TextStyle(color: Colors.grey),
                           ),
                         ),
                         IconButton(
-                          icon: Icon(_isEditingEmail ? Icons.check : Icons.edit),
+                          icon:
+                              Icon(_isEditingEmail ? Icons.check : Icons.edit),
                           onPressed: _toggleEditingEmail,
                         ),
                       ],
@@ -244,15 +381,19 @@ class _ProfilePageState extends State<ProfilePage> {
                         hintText: 'Mevcut Şifre',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isCurrentPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            _isCurrentPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
-                              _isCurrentPasswordVisible = !_isCurrentPasswordVisible;
+                              _isCurrentPasswordVisible =
+                                  !_isCurrentPasswordVisible;
                             });
                           },
                         ),
@@ -274,12 +415,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         hintText: 'Yeni Şifre',
                         hintStyle: TextStyle(color: Colors.grey[500]),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isNewPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: Colors.grey,
-                          ),
+                              _isNewPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey),
                           onPressed: () {
                             setState(() {
                               _isNewPasswordVisible = !_isNewPasswordVisible;
@@ -297,15 +440,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ElevatedButton(
                         onPressed: _logout,
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
-                        child: const Text('Çıkış Yap', style: TextStyle(fontSize: 16)),
+                        child: const Text('Çıkış Yap',
+                            style: TextStyle(fontSize: 16)),
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton(
@@ -314,15 +461,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           _uploadImage();
                         },
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                          backgroundColor: MaterialStateProperty.all(const Color(0xff1F3C51)),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff1F3C51)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
-                        child: const Text('Kaydet', style: TextStyle(fontSize: 16)),
+                        child: const Text('Kaydet',
+                            style: TextStyle(fontSize: 16)),
                       ),
                     ],
                   ),

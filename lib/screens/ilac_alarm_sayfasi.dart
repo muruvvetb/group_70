@@ -24,6 +24,7 @@ class IlacAlarmSayfasi extends StatefulWidget {
 class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
   DateTime _selectedDay = DateTime.now();
   List<Alarm> _alarms = [];
+  final int maxAlarms = 2; // Maksimum alarm sayısı
 
   @override
   void initState() {
@@ -280,12 +281,19 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        heroTag: 'uniqueTag', // Add a unique hero tag here
+        heroTag: 'uniqueTag',
         backgroundColor: const Color.fromARGB(255, 133, 187, 222),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
         onPressed: () async {
+          // Alarm sayısını kontrol et
+          if (FirebaseAuth.instance.currentUser!.isAnonymous &&
+              _alarms.length >= maxAlarms) {
+            _showLimitReachedDialog();
+            return; // Alarm ekleme işlemini engelle
+          }
+
           final newAlarm = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -307,6 +315,37 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
           }
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showLimitReachedDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          'Sınıra Ulaşıldı',
+          textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          'Misafir olarak en fazla 2 alarm kurabilirsiniz.',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text(
+                'Tamam',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 133, 187, 222), // Yazı rengi
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
