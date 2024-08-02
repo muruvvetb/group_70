@@ -21,6 +21,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   // Implement your sign-in logic here
   void signUserIn() async {
     setState(() {
@@ -31,13 +38,16 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
+      print("Login successful"); // Log success
     } on FirebaseAuthException catch (e) {
       // Handle error here
       print("Error: ${e.message}");
     } finally {
-      setState(() {
-        isLoading = false; // Hide loading indicator
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false; // Hide loading indicator
+        });
+      }
     }
   }
 
@@ -48,13 +58,36 @@ class _LoginPageState extends State<LoginPage> {
     });
     try {
       await AuthService().signInWithGoogle();
+      print("Google login successful"); // Log success
     } on FirebaseAuthException catch (e) {
       // Handle error here
       print("Error: ${e.message}");
     } finally {
-      setState(() {
-        isLoading = false; // Hide loading indicator
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false; // Hide loading indicator
+        });
+      }
+    }
+  }
+
+  // Implement guest login logic here
+  void guestLogin() async {
+    setState(() {
+      isLoading = true; // Show loading indicator
+    });
+    try {
+      await FirebaseAuth.instance.signInAnonymously();
+      print("Guest login successful"); // Log success
+    } on FirebaseAuthException catch (e) {
+      // Handle error here
+      print("Error: ${e.message}");
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false; // Hide loading indicator
+        });
+      }
     }
   }
 
@@ -82,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Text(
                   "Cep Eczanem",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Color.fromARGB(206, 3, 45, 85),
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
@@ -139,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Şifreni mi unuttun
                 GestureDetector(
-                  onTap: navigateToForgotPassword, // Add the navigation function here
+                  onTap: navigateToForgotPassword,
                   child: Text(
                     "Şifreni mi unuttun?",
                     style: TextStyle(
@@ -185,6 +218,32 @@ class _LoginPageState extends State<LoginPage> {
                 // Google ile giriş
                 GoogleButton(
                   onTap: GoogleLogin,
+                ),
+
+                const SizedBox(height: 35),
+
+                // Misafir olarak gir butonu
+                Container(
+                  width: 375,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: guestLogin,
+                    child: const Text(
+                      "Misafir olarak gir",
+                      style: TextStyle(
+                        color: Colors.black, // Set the text color to black
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black, // This sets the text color
+                      backgroundColor: Color.fromARGB(255, 223, 223, 223), // Button background color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

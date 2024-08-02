@@ -6,17 +6,18 @@ import 'package:cep_eczane/screens/ilac_alarm_sayfasi.dart';
 import 'package:cep_eczane/services/notification_service.dart';
 import 'login_or_register_page.dart';
 import 'package:cep_eczane/widgets/bottom_navigation_bar.dart';
-import 'package:cep_eczane/services/firestore_service.dart'; // FirestoreService import edildi
+import 'package:cep_eczane/services/firestore_service.dart';
+import 'package:cep_eczane/screens/guest_home_page.dart';
 
 class AuthPage extends StatelessWidget {
   final NotificationService notificationService;
-  final FirestoreService firestoreService; // FirestoreService parametresi eklendi
+  final FirestoreService firestoreService;
 
   const AuthPage({
     super.key,
     required this.notificationService,
     required this.firestoreService,
-  }); // FirestoreService parametresi eklendi
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,14 @@ class AuthPage extends StatelessWidget {
 
           // User logged in
           if (snapshot.hasData) {
-            return CustomBottomNavigationBar(
-              notificationService: notificationService,
-              firestoreService: firestoreService, // FirestoreService parametresi eklendi
-            );
+            if (snapshot.data!.isAnonymous) {
+              return GuestHomePage();
+            } else {
+              return CustomBottomNavigationBar(
+                notificationService: notificationService,
+                firestoreService: firestoreService,
+              );
+            }
           }
 
           // User NOT logged in
