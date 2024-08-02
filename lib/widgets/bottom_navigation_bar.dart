@@ -1,14 +1,21 @@
+import 'dart:developer';
+import 'package:cep_eczane/screens/text_bulma.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cep_eczane/screens/home_screen.dart';
 import 'package:cep_eczane/screens/profile_page.dart';
 import 'package:cep_eczane/screens/ilac_alarm_sayfasi.dart';
 import 'package:cep_eczane/screens/medicine_box.dart';
 import 'package:cep_eczane/services/notification_service.dart';
-import 'package:cep_eczane/services/firestore_service.dart';
+import 'package:cep_eczane/services/firestore_service.dart'; // FirestoreService import edildi
+import 'package:cep_eczane/utils/image_cropper.dart';
+import 'package:cep_eczane/utils/image_picker_class.dart';
+import 'package:cep_eczane/widgets/dialog_widget.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   final NotificationService notificationService;
-  final FirestoreService firestoreService;
+  final FirestoreService firestoreService; // FirestoreService parametresi eklendi
 
   const CustomBottomNavigationBar({
     Key? key,
@@ -17,8 +24,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
+  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
@@ -32,10 +38,54 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+    if (index == 2) {
+      _showImagePickerModal();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+      _pageController.jumpToPage(index);
+    }
+  }
+
+  void _showImagePickerModal() {
+    imagePickerModal(context, onCameraTap: () {
+      log("Camera");
+      pickImage(source: ImageSource.camera).then((value) {
+        if (value != '') {
+          imageCropperView(value, context).then((value) {
+            if (value != '') {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => RecognizePage(
+                    path: value,
+                  ),
+                ),
+              );
+            }
+          });
+        }
+      });
+    }, onGalleryTap: () {
+      log("Gallery");
+      pickImage(source: ImageSource.gallery).then((value) {
+        if (value != '') {
+          imageCropperView(value, context).then((value) {
+            if (value != '') {
+              Navigator.push(
+                context,
+                CupertinoPageRoute(
+                  builder: (_) => RecognizePage(
+                    path: value,
+                  ),
+                ),
+              );
+            }
+          });
+        }
+      });
     });
-    _pageController.jumpToPage(index);
   }
 
   @override
@@ -51,10 +101,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         children: <Widget>[
           HomePage(),
           MedicineBox(),
-          Container(), // Placeholder for camera, replace with actual screen
+          Container(), // This remains empty as the modal will handle camera/gallery
           IlacAlarmPageWrapper(
             notificationService: widget.notificationService,
-            firestoreService: widget.firestoreService,
+            firestoreService: widget.firestoreService, // FirestoreService parametresi eklendi
           ),
           ProfilePage(),
         ],
@@ -73,17 +123,15 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             label: 'Anasayfa',
           ),
           BottomNavigationBarItem(
-            icon: _buildIcon(
-                Icons.medical_services_outlined, Icons.medical_services, 1),
+            icon: _buildIcon(Icons.medical_services_outlined, Icons.medical_services, 1),
             label: 'Ecza Kutusu',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt, size: 28, color: Color(0xFFD5E7F2)),
+            icon: Icon(Icons.camera_alt, size: 28, color: Color(0xFFD5E7F2)), // Placeholder for camera, replace with actual screen
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: _buildIcon(
-                Icons.notifications_outlined, Icons.notifications, 3),
+            icon: _buildIcon(Icons.notifications_outlined, Icons.notifications, 3),
             label: 'İlaç Alarmı',
           ),
           BottomNavigationBarItem(
@@ -95,17 +143,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         unselectedItemColor: Colors.black,
         backgroundColor: const Color(0xFFD5E7F2),
         iconSize: 24,
-        selectedLabelStyle:
-            const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-        unselectedLabelStyle:
-            const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
       ),
       floatingActionButton: Transform.translate(
-        offset: Offset(0, 15),
+        offset: Offset(0, 15), // Adjust the offset to move the button down
         child: FloatingActionButton(
+          heroTag: 'cameraButton',
           onPressed: () => _onItemTapped(2),
           backgroundColor: const Color(0xFF1F3C51),
-          shape: CircleBorder(),
+          shape: CircleBorder(), // This makes the FloatingActionButton circular
           child: const Icon(Icons.camera_alt, size: 28, color: Color.fromARGB(255, 0, 0, 0)),
         ),
       ),

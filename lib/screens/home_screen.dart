@@ -1,5 +1,7 @@
+// home_page.dart
 import 'package:flutter/material.dart';
 import 'package:cep_eczane/screens/yakindaki_eczaneler.dart'; // YakindakiEczaneler dosyasını import edin
+import 'search_screen.dart'; // Import the search screen
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,8 +14,20 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-              icon: Icon(Icons.notification_important_sharp), onPressed: () {}),
-          IconButton(icon: Icon(Icons.search), onPressed: () {})
+            icon: Icon(Icons.notification_important_sharp),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: Column(
