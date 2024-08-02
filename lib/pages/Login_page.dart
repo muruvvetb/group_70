@@ -224,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Misafir olarak gir butonu
                 Container(
-                  width: 375,
+                  width: 330,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: guestLogin,

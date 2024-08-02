@@ -100,7 +100,8 @@ class _MedicineBoxState extends State<MedicineBox> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Ecza Kutusu')),
+        title: const Text('Ecza Kutusu'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -221,7 +222,7 @@ class _MedicineBoxState extends State<MedicineBox> {
             );
           }
         },
-        backgroundColor: const Color.fromARGB(255, 133, 187, 222),
+        backgroundColor: const Color.fromARGB(255, 213, 231, 242),
         child: const Icon(Icons.add),
         shape: const CircleBorder(),
       ),

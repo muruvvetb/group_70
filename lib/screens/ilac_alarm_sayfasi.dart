@@ -125,6 +125,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('İlaç Alarmı'),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -282,7 +283,7 @@ class IlacAlarmSayfasiState extends State<IlacAlarmSayfasi> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'uniqueTag',
-        backgroundColor: const Color.fromARGB(255, 133, 187, 222),
+        backgroundColor: const Color.fromARGB(255, 213, 231, 242),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),

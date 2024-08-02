@@ -127,7 +127,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             label: 'Ecza Kutusu',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera_alt, size: 28, color: Color(0xFFD5E7F2)), // Placeholder for camera, replace with actual screen
+            icon: Icon(Icons.camera_alt, size: 28, color: Color.fromRGBO(213, 231, 242, 1)), // Placeholder for camera, replace with actual screen
             label: '',
           ),
           BottomNavigationBarItem(
@@ -141,7 +141,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         ],
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
-        backgroundColor: const Color(0xFFD5E7F2),
+        backgroundColor: Color.fromARGB(255, 213, 231, 242),
         iconSize: 24,
         selectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         unselectedLabelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),

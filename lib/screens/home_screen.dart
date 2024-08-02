@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cep_eczane/screens/yakindaki_eczaneler.dart'; // YakindakiEczaneler dosyasını import edin
 import 'search_screen.dart'; // Import the search screen
+import 'package:cep_eczane/widgets/news.dart'; // NewsWidget dosyasını import edin
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -13,10 +14,7 @@ class HomePage extends StatelessWidget {
         title: const Text('Anasayfa'),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.notification_important_sharp),
-            onPressed: () {},
-          ),
+          
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -31,6 +29,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // Align items to the start
         children: [
           Padding(
             padding: const EdgeInsets.all(2.0),
@@ -75,70 +74,17 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Column(
-                      children: [
-                        Text(
-                          'İlacı Bul',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                          textAlign: TextAlign.left,
-                        ),
-                        SizedBox(height: 10),
-                        Image(
-                          image: AssetImage('icons/medicine.png'),
-                          height: 60,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                "Sağlık Haberleri",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xffC64A4A)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    child: const Column(
-                      children: [
-                        Text('Sipariş ver',
-                            style: TextStyle(fontSize: 16, color: Colors.white)),
-                        SizedBox(height: 10),
-                        Image(
-                          image: AssetImage('icons/cart.png'),
-                          height: 60,
-                          fit: BoxFit.contain,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
+          Expanded(child: NewsWidget()), // NewsWidget'ı ekleyin
         ],
       ),
     );
